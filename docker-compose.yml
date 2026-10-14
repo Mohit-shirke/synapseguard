@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  falkordb:
+    image: falkordb/falkordb:latest
+    container_name: synapseguard-falkordb
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    volumes:
+      - falkordb_data:/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: synapseguard-api
+    ports:
+      - "8000:8000"
+    environment:
+      - FALKORDB_HOST=falkordb
+      - FALKORDB_PORT=6379
+      - OLLAMA_URL=http://host.docker.internal:11434
+    depends_on:
+      - falkordb
+    restart: unless-stopped
+
+volumes:
+  falkordb_data:
+
