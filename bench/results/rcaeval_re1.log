@@ -1,0 +1,93 @@
+online-boutique 3.0 {"cases": 125, "ours (product default: auto profile)": {"AC@1": 0.488, "AC@3": 0.92, "Avg@5": 0.8208, "n": 125}, "ours, evidence profile (synthetic-tuned weights)": {"AC@1": 0.24, "AC@3": 0.528, "Avg@5": 0.5136000000000001, "n": 125}, "max robust z (no graph; BARO-style scorer)": {"AC@1": 0.488, "AC@3": 0.92, "Avg@5": 0.8208, "n": 125}, "truth_degraded_rate": 1, "truth_reachable_rate": 1, "graph_latency_ms_p50": 13.171200000215322, "graph_latency_ms_p95": 19.070580000334303}
+online-boutique 5.0 {"cases": 125, "ours (product default: auto profile)": {"AC@1": 0.52, "AC@3": 0.92, "Avg@5": 0.8272, "n": 125}, "ours, evidence profile (synthetic-tuned weights)": {"AC@1": 0.4, "AC@3": 0.696, "Avg@5": 0.672, "n": 125}, "max robust z (no graph; BARO-style scorer)": {"AC@1": 0.488, "AC@3": 0.92, "Avg@5": 0.8208, "n": 125}, "truth_degraded_rate": 1, "truth_reachable_rate": 1, "graph_latency_ms_p50": 11.035899999114918, "graph_latency_ms_p95": 15.483940000194707}
+online-boutique 10.0 {"cases": 125, "ours (product default: auto profile)": {"AC@1": 0.584, "AC@3": 0.92, "Avg@5": 0.8448, "n": 125}, "ours, evidence profile (synthetic-tuned weights)": {"AC@1": 0.608, "AC@3": 0.872, "Avg@5": 0.8336, "n": 125}, "max robust z (no graph; BARO-style scorer)": {"AC@1": 0.488, "AC@3": 0.92, "Avg@5": 0.8208, "n": 125}, "truth_degraded_rate": 0.96, "truth_reachable_rate": 0.96, "graph_latency_ms_p50": 10.397199999715667, "graph_latency_ms_p95": 16.15386000048602}
+sock-shop-2 3.0 {"cases": 125, "ours (product default: auto profile)": {"AC@1": 0.592, "AC@3": 0.936, "Avg@5": 0.872, "n": 125}, "ours, evidence profile (synthetic-tuned weights)": {"AC@1": 0.128, "AC@3": 0.4, "Avg@5": 0.3776, "n": 125}, "max robust z (no graph; BARO-style scorer)": {"AC@1": 0.568, "AC@3": 0.92, "Avg@5": 0.8543999999999999, "n": 125}, "truth_degraded_rate": 1, "truth_reachable_rate": 1, "graph_latency_ms_p50": 13.098700001137331, "graph_latency_ms_p95": 17.966939998586895}
+sock-shop-2 5.0 {"cases": 125, "ours (product default: auto profile)": {"AC@1": 0.6, "AC@3": 0.936, "Avg@5": 0.872, "n": 125}, "ours, evidence profile (synthetic-tuned weights)": {"AC@1": 0.192, "AC@3": 0.48, "Avg@5": 0.4704, "n": 125}, "max robust z (no graph; BARO-style scorer)": {"AC@1": 0.568, "AC@3": 0.92, "Avg@5": 0.8543999999999999, "n": 125}, "truth_degraded_rate": 1, "truth_reachable_rate": 1, "graph_latency_ms_p50": 13.53209999979299, "graph_latency_ms_p95": 17.723860000114655}
+sock-shop-2 10.0 {"cases": 125, "ours (product default: auto profile)": {"AC@1": 0.608, "AC@3": 0.936, "Avg@5": 0.8752, "n": 125}, "ours, evidence profile (synthetic-tuned weights)": {"AC@1": 0.296, "AC@3": 0.696, "Avg@5": 0.6496, "n": 125}, "max robust z (no graph; BARO-style scorer)": {"AC@1": 0.568, "AC@3": 0.92, "Avg@5": 0.8543999999999999, "n": 125}, "truth_degraded_rate": 1, "truth_reachable_rate": 1, "graph_latency_ms_p50": 12.592500001119333, "graph_latency_ms_p95": 17.78591999936907}
+train-ticket 3.0 {"cases": 125, "ours (product default: auto profile)": {"AC@1": 0.416, "AC@3": 0.664, "Avg@5": 0.6304, "n": 125}, "ours, evidence profile (synthetic-tuned weights)": {"AC@1": 0.096, "AC@3": 0.168, "Avg@5": 0.1728, "n": 125}, "max robust z (no graph; BARO-style scorer)": {"AC@1": 0.44, "AC@3": 0.672, "Avg@5": 0.6288, "n": 125}, "truth_degraded_rate": 1, "truth_reachable_rate": 1, "graph_latency_ms_p50": 17.543099998874823, "graph_latency_ms_p95": 23.633079999490292}
+train-ticket 5.0 {"cases": 125, "ours (product default: auto profile)": {"AC@1": 0.408, "AC@3": 0.68, "Avg@5": 0.6304, "n": 125}, "ours, evidence profile (synthetic-tuned weights)": {"AC@1": 0.128, "AC@3": 0.248, "Avg@5": 0.2496, "n": 125}, "max robust z (no graph; BARO-style scorer)": {"AC@1": 0.44, "AC@3": 0.672, "Avg@5": 0.6288, "n": 125}, "truth_degraded_rate": 1, "truth_reachable_rate": 1, "graph_latency_ms_p50": 16.626200000246172, "graph_latency_ms_p95": 22.97422000046936}
+train-ticket 10.0 {"cases": 125, "ours (product default: auto profile)": {"AC@1": 0.424, "AC@3": 0.664, "Avg@5": 0.624, "n": 125}, "ours, evidence profile (synthetic-tuned weights)": {"AC@1": 0.176, "AC@3": 0.328, "Avg@5": 0.3312, "n": 125}, "max robust z (no graph; BARO-style scorer)": {"AC@1": 0.44, "AC@3": 0.672, "Avg@5": 0.6288, "n": 125}, "truth_degraded_rate": 0.992, "truth_reachable_rate": 0.976, "graph_latency_ms_p50": 15.001499999925727, "graph_latency_ms_p95": 18.920439999055816}
+pruning+severity {'online-boutique': {'z=3.0': 0.8208, 'z=5.0': 0.8272, 'z=10.0': 0.8448}, 'sock-shop-2': {'z=3.0': 0.872, 'z=5.0': 0.872, 'z=10.0': 0.8752}, 'train-ticket': {'z=3.0': 0.6304, 'z=5.0': 0.6304, 'z=10.0': 0.624}}
+{
+ "online-boutique": {
+  "tuned_on": [
+   "sock-shop-2",
+   "train-ticket"
+  ],
+  "z": 10.0,
+  "weights": {
+   "frontier": 0.25,
+   "coverage": 4.0,
+   "onset": 1.0,
+   "change": 2.0,
+   "severity": 4.0,
+   "common": 2.0,
+   "exposed": 4.0,
+   "lag": 0.0
+  },
+  "train_avg5": 0.8096,
+  "test_avg5": 0.872,
+  "test_avg5_by_fault": {
+   "cpu": 0.936,
+   "delay": 0.944,
+   "disk": 0.92,
+   "loss": 0.608,
+   "mem": 0.952
+  },
+  "no_graph_max_z_avg5": 0.8208
+ },
+ "sock-shop-2": {
+  "tuned_on": [
+   "online-boutique",
+   "train-ticket"
+  ],
+  "z": 10.0,
+  "weights": {
+   "frontier": 0.0,
+   "coverage": 4.0,
+   "onset": 2.0,
+   "change": 2.0,
+   "severity": 4.0,
+   "common": 2.0,
+   "exposed": 4.0,
+   "lag": 0.0
+  },
+  "train_avg5": 0.8,
+  "test_avg5": 0.8928,
+  "test_avg5_by_fault": {
+   "cpu": 0.904,
+   "delay": 0.864,
+   "disk": 0.968,
+   "loss": 0.8,
+   "mem": 0.928
+  },
+  "no_graph_max_z_avg5": 0.8544
+ },
+ "train-ticket": {
+  "tuned_on": [
+   "online-boutique",
+   "sock-shop-2"
+  ],
+  "z": 10.0,
+  "weights": {
+   "frontier": 0.0,
+   "coverage": 1.0,
+   "onset": 2.0,
+   "change": 2.0,
+   "severity": 4.0,
+   "common": 2.0,
+   "exposed": 4.0,
+   "lag": 0.0
+  },
+  "train_avg5": 0.8952,
+  "test_avg5": 0.6528,
+  "test_avg5_by_fault": {
+   "cpu": 0.808,
+   "delay": 0.496,
+   "disk": 0.76,
+   "loss": 0.28,
+   "mem": 0.92
+  },
+  "no_graph_max_z_avg5": 0.6288
+ }
+}

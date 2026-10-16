@@ -1,30 +1,33 @@
-version: '3.8'
-
 services:
   falkordb:
-    image: falkordb/falkordb:latest
-    container_name: synapseguard-falkordb
+    # Pinned to the exact build SynapseGuard was tested on (module version 6.0.2).
+    image: falkordb/falkordb:6.0.2
     ports:
-      - "6379:6379"
-    restart: unless-stopped
+      - "127.0.0.1:6379:6379"   # localhost only; FalkorDB has no password in this setup
+      - "127.0.0.1:3001:3000"   # FalkorDB Browser
     volumes:
-      - falkordb_data:/data
+      - falkordb_data:/var/lib/falkordb/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "PING"]
+      interval: 3s
+      timeout: 2s
+      retries: 20
+    restart: unless-stopped
 
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: synapseguard-api
+    build: .
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     environment:
-      - FALKORDB_HOST=falkordb
-      - FALKORDB_PORT=6379
-      - OLLAMA_URL=http://host.docker.internal:11434
+      FALKORDB_HOST: falkordb
+      FALKORDB_PORT: "6379"
+      SG_GRAPH: sg_otel_demo
+      SG_LLM: "0"
+      OLLAMA_URL: http://host.docker.internal:11434
     depends_on:
-      - falkordb
+      falkordb:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
   falkordb_data:
-

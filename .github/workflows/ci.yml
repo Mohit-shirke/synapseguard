@@ -1,0 +1,24 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      falkordb:
+        image: falkordb/falkordb:6.0.2
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli PING" --health-interval 3s --health-timeout 2s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - run: python -m pytest tests -q
+        env:
+          PYTHONPATH: .
+      - name: synthetic accuracy smoke (small)
+        run: python -m bench.eval_accuracy --val 0:40 --test 1000:1080
+        env:
+          PYTHONPATH: .

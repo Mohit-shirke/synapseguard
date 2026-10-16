@@ -1,0 +1,51 @@
+##### re1-ob
+Avg@5-CPU:   0.98
+Chance@5-CPU: 0.23
+Lift@5-CPU:  0.75
+Avg@5-MEM:   0.99
+Chance@5-MEM: 0.23
+Lift@5-MEM:  0.76
+Avg@5-DISK:  0.94
+Chance@5-DISK: 0.23
+Lift@5-DISK: 0.71
+Avg@5-DELAY: 0.92
+Chance@5-DELAY: 0.23
+Lift@5-DELAY: 0.69
+Avg@5-LOSS:  0.65
+Chance@5-LOSS: 0.23
+Lift@5-LOSS: 0.42
+##### re1-ss
+Avg@5-CPU:   0.77
+Chance@5-CPU: n/a (no candidate count for 25 of 50 cases)
+Lift@5-CPU:  n/a
+Avg@5-MEM:   0.85
+Chance@5-MEM: n/a (no candidate count for 25 of 50 cases)
+Lift@5-MEM:  n/a
+Avg@5-DISK:  0.72
+Chance@5-DISK: n/a (no candidate count for 25 of 50 cases)
+Lift@5-DISK: n/a
+Avg@5-DELAY: 0.75
+Chance@5-DELAY: n/a (no candidate count for 25 of 50 cases)
+Lift@5-DELAY: n/a
+Avg@5-LOSS:  0.59
+Chance@5-LOSS: n/a (no candidate count for 25 of 50 cases)
+Lift@5-LOSS: n/a
+##### re1-tt
+Avg@5-CPU:   0.57
+Chance@5-CPU: n/a (no candidate count for 50 of 75 cases)
+Lift@5-CPU:  n/a
+Avg@5-MEM:   0.61
+Chance@5-MEM: n/a (no candidate count for 50 of 75 cases)
+Lift@5-MEM:  n/a
+Avg@5-DISK:  0.71
+Chance@5-DISK: n/a (no candidate count for 50 of 75 cases)
+Lift@5-DISK: n/a
+Avg@5-DELAY: 0.56
+Chance@5-DELAY: n/a (no candidate count for 50 of 75 cases)
+Lift@5-DELAY: n/a
+Avg@5-LOSS:  0.45
+Chance@5-LOSS: n/a (no candidate count for 50 of 75 cases)
+Lift@5-LOSS: n/a
+
+[exited with code 0]
+# RCAEval commit 259ea4167160256a74ad30004aa3d96a998c846e

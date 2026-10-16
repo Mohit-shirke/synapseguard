@@ -1,0 +1,355 @@
+{
+  "topology": "otel",
+  "validation_seeds": "0:300",
+  "test_seeds": "1000:1500",
+  "weights_ours": {
+    "frontier": 0.5,
+    "coverage": 1.0,
+    "onset": 2.0,
+    "change": 2.0,
+    "severity": 0.5,
+    "common": 2.0,
+    "exposed": 0.25,
+    "lag": 2.0
+  },
+  "weights_flat": {
+    "onset": 0.25,
+    "change": 1.5,
+    "severity": 0.5,
+    "common": 1.5
+  },
+  "methods": {
+    "ours, evidence profile": {
+      "n": 500,
+      "top1": 0.952,
+      "top3": 0.994,
+      "mrr": 0.9723333333333334,
+      "uses": "graph",
+      "top1_by_fault": {
+        "config_change": 0.975,
+        "deploy_bug": 0.972,
+        "feature_flag": 1.0,
+        "host_saturation": 0.989,
+        "retry_storm": 0.923,
+        "silent": 0.845
+      }
+    },
+    "ours, auto profile (product default)": {
+      "n": 500,
+      "top1": 0.952,
+      "top3": 0.994,
+      "mrr": 0.9723333333333334,
+      "uses": "graph",
+      "top1_by_fault": {
+        "config_change": 0.975,
+        "deploy_bug": 0.972,
+        "feature_flag": 1.0,
+        "host_saturation": 0.989,
+        "retry_storm": 0.923,
+        "silent": 0.845
+      }
+    },
+    "graph pruning + severity only": {
+      "n": 500,
+      "top1": 0.3,
+      "top3": 0.626,
+      "mrr": 0.5070809024309024,
+      "uses": "graph (ablation)",
+      "top1_by_fault": {
+        "config_change": 0.329,
+        "deploy_bug": 0.283,
+        "feature_flag": 0.338,
+        "host_saturation": 0.25,
+        "retry_storm": 0.185,
+        "silent": 0.405
+      }
+    },
+    "ours, no reachability pruning": {
+      "n": 500,
+      "top1": 0.908,
+      "top3": 0.988,
+      "mrr": 0.9457857142857143,
+      "uses": "graph (ablation)",
+      "top1_by_fault": {
+        "config_change": 0.962,
+        "deploy_bug": 0.962,
+        "feature_flag": 0.959,
+        "host_saturation": 0.989,
+        "retry_storm": 0.938,
+        "silent": 0.631
+      }
+    },
+    "ours without 'frontier'": {
+      "n": 500,
+      "top1": 0.956,
+      "top3": 0.994,
+      "mrr": 0.9746190476190476,
+      "uses": "graph (ablation)",
+      "top1_by_fault": {
+        "config_change": 0.987,
+        "deploy_bug": 0.981,
+        "feature_flag": 1.0,
+        "host_saturation": 1.0,
+        "retry_storm": 0.923,
+        "silent": 0.833
+      }
+    },
+    "ours without 'coverage'": {
+      "n": 500,
+      "top1": 0.95,
+      "top3": 0.994,
+      "mrr": 0.97125,
+      "uses": "graph (ablation)",
+      "top1_by_fault": {
+        "config_change": 0.987,
+        "deploy_bug": 0.981,
+        "feature_flag": 0.986,
+        "host_saturation": 1.0,
+        "retry_storm": 0.923,
+        "silent": 0.81
+      }
+    },
+    "ours without 'onset'": {
+      "n": 500,
+      "top1": 0.95,
+      "top3": 0.992,
+      "mrr": 0.9706857142857143,
+      "uses": "graph (ablation)",
+      "top1_by_fault": {
+        "config_change": 0.987,
+        "deploy_bug": 0.991,
+        "feature_flag": 1.0,
+        "host_saturation": 1.0,
+        "retry_storm": 0.908,
+        "silent": 0.798
+      }
+    },
+    "ours without 'change'": {
+      "n": 500,
+      "top1": 0.882,
+      "top3": 0.986,
+      "mrr": 0.9341190476190476,
+      "uses": "graph (ablation)",
+      "top1_by_fault": {
+        "config_change": 0.823,
+        "deploy_bug": 0.877,
+        "feature_flag": 0.905,
+        "host_saturation": 1.0,
+        "retry_storm": 0.723,
+        "silent": 0.917
+      }
+    },
+    "ours without 'severity'": {
+      "n": 500,
+      "top1": 0.944,
+      "top3": 0.994,
+      "mrr": 0.9683999999999999,
+      "uses": "graph (ablation)",
+      "top1_by_fault": {
+        "config_change": 0.975,
+        "deploy_bug": 0.972,
+        "feature_flag": 1.0,
+        "host_saturation": 1.0,
+        "retry_storm": 0.892,
+        "silent": 0.81
+      }
+    },
+    "ours without 'common'": {
+      "n": 500,
+      "top1": 0.94,
+      "top3": 0.994,
+      "mrr": 0.9656666666666667,
+      "uses": "graph (ablation)",
+      "top1_by_fault": {
+        "config_change": 0.975,
+        "deploy_bug": 0.972,
+        "feature_flag": 1.0,
+        "host_saturation": 0.902,
+        "retry_storm": 0.954,
+        "silent": 0.845
+      }
+    },
+    "ours without 'exposed'": {
+      "n": 500,
+      "top1": 0.946,
+      "top3": 0.994,
+      "mrr": 0.9693999999999999,
+      "uses": "graph (ablation)",
+      "top1_by_fault": {
+        "config_change": 0.975,
+        "deploy_bug": 0.972,
+        "feature_flag": 0.986,
+        "host_saturation": 0.989,
+        "retry_storm": 0.923,
+        "silent": 0.821
+      }
+    },
+    "ours without 'lag'": {
+      "n": 500,
+      "top1": 0.884,
+      "top3": 0.984,
+      "mrr": 0.9336,
+      "uses": "graph (ablation)",
+      "top1_by_fault": {
+        "config_change": 0.962,
+        "deploy_bug": 0.953,
+        "feature_flag": 0.986,
+        "host_saturation": 0.989,
+        "retry_storm": 0.862,
+        "silent": 0.536
+      }
+    },
+    "flat evidence (tuned, no relationships)": {
+      "n": 500,
+      "top1": 0.816,
+      "top3": 0.958,
+      "mrr": 0.8874746031746032,
+      "uses": "flat",
+      "top1_by_fault": {
+        "config_change": 0.911,
+        "deploy_bug": 0.925,
+        "feature_flag": 0.986,
+        "host_saturation": 0.957,
+        "retry_storm": 0.908,
+        "silent": 0.214
+      }
+    },
+    "symptom_blame": {
+      "n": 500,
+      "top1": 0.086,
+      "top3": 0.086,
+      "mrr": 0.086,
+      "uses": "flat",
+      "top1_by_fault": {
+        "config_change": 0.076,
+        "deploy_bug": 0.113,
+        "feature_flag": 0.162,
+        "host_saturation": 0.0,
+        "retry_storm": 0.015,
+        "silent": 0.143
+      }
+    },
+    "flat_anomaly": {
+      "n": 500,
+      "top1": 0.16,
+      "top3": 0.454,
+      "mrr": 0.3482096903096903,
+      "uses": "flat",
+      "top1_by_fault": {
+        "config_change": 0.228,
+        "deploy_bug": 0.16,
+        "feature_flag": 0.23,
+        "host_saturation": 0.0,
+        "retry_storm": 0.185,
+        "silent": 0.19
+      }
+    },
+    "flat_change": {
+      "n": 500,
+      "top1": 0.652,
+      "top3": 0.83,
+      "mrr": 0.7623391497391497,
+      "uses": "flat",
+      "top1_by_fault": {
+        "config_change": 0.911,
+        "deploy_bug": 0.896,
+        "feature_flag": 0.919,
+        "host_saturation": 0.25,
+        "retry_storm": 0.877,
+        "silent": 0.131
+      }
+    },
+    "naive_deepest (old SynapseGuard)": {
+      "n": 500,
+      "top1": 0.254,
+      "top3": 0.586,
+      "mrr": 0.4428047619047619,
+      "uses": "graph",
+      "top1_by_fault": {
+        "config_change": 0.418,
+        "deploy_bug": 0.33,
+        "feature_flag": 0.419,
+        "host_saturation": 0.0,
+        "retry_storm": 0.062,
+        "silent": 0.286
+      }
+    },
+    "pagerank (MicroRCA-style)": {
+      "n": 500,
+      "top1": 0.464,
+      "top3": 0.716,
+      "mrr": 0.5976722222222223,
+      "uses": "graph",
+      "top1_by_fault": {
+        "config_change": 0.658,
+        "deploy_bug": 0.651,
+        "feature_flag": 0.716,
+        "host_saturation": 0.0,
+        "retry_storm": 0.077,
+        "silent": 0.631
+      }
+    }
+  },
+  "calibration": {
+    "buckets": {
+      "0.00-0.50": {
+        "n": 1,
+        "accuracy": 1.0
+      },
+      "0.50-0.80": {
+        "n": 28,
+        "accuracy": 0.714
+      },
+      "0.80-0.95": {
+        "n": 43,
+        "accuracy": 0.814
+      },
+      "0.95-1.00": {
+        "n": 428,
+        "accuracy": 0.981
+      }
+    },
+    "confidently_wrong_rate": 0.032,
+    "abstention": {
+      ">=0.0": {
+        "answered": 1.0,
+        "accuracy_when_answered": 0.952
+      },
+      ">=0.5": {
+        "answered": 0.998,
+        "accuracy_when_answered": 0.952
+      },
+      ">=0.8": {
+        "answered": 0.942,
+        "accuracy_when_answered": 0.966
+      },
+      ">=0.9": {
+        "answered": 0.892,
+        "accuracy_when_answered": 0.98
+      }
+    }
+  },
+  "fault_mix": {
+    "config_change": 79,
+    "deploy_bug": 106,
+    "feature_flag": 74,
+    "host_saturation": 92,
+    "retry_storm": 65,
+    "silent": 84
+  },
+  "cypher_vs_reference_mismatches": 0,
+  "extract_and_score_latency_ms": {
+    "p50": 13.221400000475114,
+    "p95": 18.44399999936286,
+    "p99": 23.518899999544374,
+    "mean": 13.126501799990365
+  },
+  "mean_subgraph_size": 6.566,
+  "mean_queries": 6.352,
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel"
+  },
+  "wall_time_s": 166.4
+}

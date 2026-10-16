@@ -1,0 +1,46 @@
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+{"question": "What breaks if postgresql goes down?", "called": ["blast_radius"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 11352}
+{"question": "What breaks if Postgres goes down?", "called": ["blast_radius"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 12130}
+{"question": "Who should I page for the payment service?", "called": ["who_to_page"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 18144}
+{"question": "Who is on call for node-c?", "called": ["who_to_page"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 13072}
+{"question": "Who made the most recent change to payment?", "called": ["recent_changes"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 17758}
+{"question": "What changed recently around checkout?", "called": ["recent_changes"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 33985}
+{"question": "Why is frontend-proxy connected to payment?", "called": ["path_between"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 13516}
+{"question": "Is email connected to quote?", "called": ["path_between"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 10185}
+{"question": "Which services are the most load-bearing?", "called": ["load_bearing"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 37426}
+{"question": "What breaks if payments-gateway goes down?", "called": ["blast_radius"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 14102}
+{"question": "What does the graph remember about payment?", "called": ["recall"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 30444}
+{"question": "Investigate the open incident. What is the root cause?", "called": ["investigate_incident"], "tool_ok": true, "fact_ok": true, "llm_sentence_accepted": true, "wall_ms": 41133}
+{
+ "model": "llama3.1:8b",
+ "questions": 12,
+ "tool_selection_accuracy": 1.0,
+ "answer_contains_expected_fact": 1.0,
+ "llm_sentence_accepted_rate": 1.0,
+ "latency_ms_p50": 15930.0,
+ "latency_ms_max": 41133,
+ "hardware": "CPU only (no GPU), 16 GB RAM"
+}

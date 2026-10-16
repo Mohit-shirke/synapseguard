@@ -154,3 +154,4 @@ def test_concurrent_incident_investigations(client):
     for r in results:
         assert r.root_cause_service == "MySQL-InventoryShard-01"
         assert len(r.evidence_chain) > 0
+

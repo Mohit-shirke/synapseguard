@@ -1,34 +1,20 @@
-# Official Demo Video Script (2 to 3 Minutes)
+# Demo video script (about 3 minutes)
 
-**Product:** SynapseGuard  
-**Track:** Track 01 — Agents That Act on Connected Data  
-**Goal:** Prove FalkorDB's indispensability, show live graph reasoning, and demonstrate an autonomous containment action.
+Record at 1440×900. Before recording: `docker compose up -d` (or uvicorn),
+`curl -X POST "http://127.0.0.1:8000/api/reset?confirm=true"`, then open
+**http://127.0.0.1:8000** (use 127.0.0.1: an old service worker from another
+project may hijack `localhost:8000` in your browser). Everything shown is live;
+say once that the scenarios use synthetic telemetry on the real OpenTelemetry
+Demo topology. Optional pre-warm: ask the LLM one question before recording so
+the model is loaded.
 
----
-
-## Act 1: The Problem (0:00 - 0:35)
-- **Visual:** Open browser showing the frontend dashboard or incident alert: `"CRITICAL: HTTP 504 Timeouts on Checkout API"`.
-- **Narration:**
-  > *"Modern cloud applications consist of hundreds of interdependent services. When an outage strikes, alerts fire everywhere at once. Traditional monitoring and vector RAG search fail because they confuse symptoms with root causes—blaming the API Gateway because it has the most error logs. Today we introduce **SynapseGuard**, an autonomous SRE agent whose reasoning runs entirely on **FalkorDB**."*
-
----
-
-## Act 2: Live FalkorDB Graph Inspection (0:35 - 1:15)
-- **Visual:** Click **"Reset & Seed Topology"**. Watch Cytoscape render the 13-node live microservice graph with color-coded nodes (Green = Healthy, Red = Failing, Yellow = ConfigChange).
-- **Narration:**
-  > *"Here is our live service topology loaded directly from FalkorDB. Notice the synchronous call chain: `API-Gateway` calls `Order-Service`, which calls `Inventory-Service`, which depends on `MySQL-InventoryShard-01`. Moments ago, a DevOps engineer altered `max_connections` on the MySQL shard from 500 down to 20. The database began rejecting connections, cascading timeouts 3 hops upstream all the way to the frontend gateway."*
-
----
-
-## Act 3: Autonomous Agent Execution & Evidence Trail (1:15 - 2:05)
-- **Visual:** Click **"Run Autonomous Agent"**. The spinner appears for ~1.5s, then displays the **Identified Root Cause**, **Multi-Hop Evidence Trail**, and **Containment Plan**.
-- **Narration:**
-  > *"When we trigger SynapseGuard, the agent executes variable-length Cypher traversals across the graph. In less than 5 milliseconds, it isolates the true culprit: `MySQL-InventoryShard-01`, 3 hops deep. Look at the verifiable evidence trail: it traces the exact dependency edges and correlates the parameter mutation. It then computes the upstream blast radius to find all affected services and generates an autonomous containment plan: roll back the config change and trip the circuit breaker on inbound inventory calls."*
-
----
-
-## Act 4: The Graph Removal Test & Conclusion (2:05 - 2:40)
-- **Visual:** Highlight the **FalkorDB Graph Removal Benchmark** card at the bottom of the dashboard.
-- **Narration:**
-  > *"What happens without FalkorDB? We ran an automated ablation test: flat search sees 3 failing services at once with no directional awareness, falsely blaming the API Gateway with a 42% hallucination rate. With FalkorDB, causal accuracy is 100%. SynapseGuard proves that connected data is essential for reliable AI agents. Built with FalkorDB for Track 01 of Graph Hacks 2026. Thank you!"*
-
+| Time | Show | Say |
+|---|---|---|
+| 0:00–0:15 | Graph | "When checkout breaks, the alert fires on the front door. The cause is usually hops away, and the first twenty minutes go into finding it and finding who owns it." |
+| 0:15–0:40 | Load **payment-flag** → Investigate. Point at the **Root cause** banner | "SynapseGuard follows the call graph in FalkorDB from the alerting service, only into unhealthy services. Root cause: Payment, a paymentFailure flag that landed 79 seconds before Payment degraded. And it tells me who to page: Alice, on call for the owning team, who also authored the flag change. Every line has its graph path." |
+| 0:40–1:00 | **Graph removed** tile, timeline | "Same signals without relationships blame a flapping decoy. The timeline shows why the graph answer holds: Payment broke first, its callers followed within a minute." |
+| 1:00–1:25 | Ask chips: **depth 1**, then **depth 4** | "What breaks if Payment goes down? One hop: Checkout, something a join could tell you. Four hops: six services, including the chatbot, via agent, frontend, checkout. Every path is shown." |
+| 1:25–1:40 | Chip **Unknown: payments-gateway** | "Ask about something that isn't in the graph and it says so, and suggests 'payment'. No query runs on a name that doesn't resolve." |
+| 1:40–2:05 | Blast radius card, breakers; approve + execute rollback; Investigate again; Confirm | "It places circuit breakers with FalkorDB's max-flow algorithm. Actions need a human. After the simulated rollback, only unrelated noise remains, and confirming the root cause writes memory." |
+| 2:05–2:35 | Type "Postgres is down, who do I wake?" → **Ask LLM** (or terminal `python -m scripts.mcp_smoke`) | "A local model picks from a fixed catalogue of human-written graph tools over MCP. It never writes Cypher; names are resolved against the graph; its sentence is rejected if it names anything the tools didn't return. 12 out of 12 tool choices correct in our test." |
+| 2:35–3:00 | `docs/evaluation.md` table | "Measured: 95% top-1 on held-out synthetic incidents versus 82% without the graph. On real fault-injection data from RCAEval, ranking is on par with a strong baseline, and the repo says exactly that." |

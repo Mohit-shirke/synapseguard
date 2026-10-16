@@ -1,0 +1,194 @@
+{
+  "summary": {
+    "model": "llama3.1:8b",
+    "questions": 12,
+    "tool_selection_accuracy": 1.0,
+    "answer_contains_expected_fact": 1.0,
+    "llm_sentence_accepted_rate": 1.0,
+    "latency_ms_p50": 15930.0,
+    "latency_ms_max": 41133,
+    "hardware": "CPU only (no GPU), 16 GB RAM"
+  },
+  "rows": [
+    {
+      "question": "What breaks if postgresql goes down?",
+      "called": [
+        "blast_radius"
+      ],
+      "outcomes": [
+        "answered_with_path"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "If PostgreSQL goes down, the accounting and product-catalog services will be affected.",
+      "wall_ms": 11352
+    },
+    {
+      "question": "What breaks if Postgres goes down?",
+      "called": [
+        "blast_radius"
+      ],
+      "outcomes": [
+        "answered_with_path"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "If Postgres goes down, the accounting and product-catalog services will be affected.",
+      "wall_ms": 12130
+    },
+    {
+      "question": "Who should I page for the payment service?",
+      "called": [
+        "who_to_page"
+      ],
+      "outcomes": [
+        "answered_with_path"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "You should page Alice Moreau and Elif Demir for the payment service.",
+      "wall_ms": 18144
+    },
+    {
+      "question": "Who is on call for node-c?",
+      "called": [
+        "who_to_page"
+      ],
+      "outcomes": [
+        "answered_with_path"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "The on-call owner for node-c is Kiri Walker.",
+      "wall_ms": 13072
+    },
+    {
+      "question": "Who made the most recent change to payment?",
+      "called": [
+        "recent_changes"
+      ],
+      "outcomes": [
+        "answered_with_path"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "The most recent change to payment was made by Alice Moreau, who enabled the flag paymentFailure. The change was made 6 minutes ago and is identified as chg-5010-01.",
+      "wall_ms": 17758
+    },
+    {
+      "question": "What changed recently around checkout?",
+      "called": [
+        "recent_changes"
+      ],
+      "outcomes": [
+        "answered_with_path"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "Recently, there were 4 changes around checkout:\n\n1. chg-5010-07: Routine feature_flag on checkout (1 min ago)\n2. chg-5010-01: Enable flag paymentFailure (6 min ago)\n3. chg-5010-02: Routine config on cart (11 min ago)\n4. chg-5010-03: Routine config on queue (14 min ago)\n\nThese changes were made by ci-bot, Alice Moreau, and sre-oncall.",
+      "wall_ms": 33985
+    },
+    {
+      "question": "Why is frontend-proxy connected to payment?",
+      "called": [
+        "path_between"
+      ],
+      "outcomes": [
+        "answered_with_path"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "The frontend-proxy is connected to payment because it depends on the checkout service, which in turn depends on the payment service. The path between frontend-proxy and payment is: frontend-proxy -> frontend -> checkout -> payment.",
+      "wall_ms": 13516
+    },
+    {
+      "question": "Is email connected to quote?",
+      "called": [
+        "path_between"
+      ],
+      "outcomes": [
+        "not_in_graph"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "The tools returned: No call path connects email and quote in either direction.",
+      "wall_ms": 10185
+    },
+    {
+      "question": "Which services are the most load-bearing?",
+      "called": [
+        "load_bearing"
+      ],
+      "outcomes": [
+        "answered_with_path"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "The most load-bearing services are postgresql, product-catalog, queue, mcp, cache, flagd, cart, agent, quote, and frontend.",
+      "wall_ms": 37426
+    },
+    {
+      "question": "What breaks if payments-gateway goes down?",
+      "called": [
+        "blast_radius"
+      ],
+      "outcomes": [
+        "unknown_entity"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "The tool call returned an unknown_entity outcome. The service 'payments-gateway' is not in the graph. It's possible that the service is misspelled or not recognized.",
+      "wall_ms": 14102
+    },
+    {
+      "question": "What does the graph remember about payment?",
+      "called": [
+        "recall"
+      ],
+      "outcomes": [
+        "not_in_graph"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "The graph does not remember anything about payment.",
+      "wall_ms": 30444
+    },
+    {
+      "question": "Investigate the open incident. What is the root cause?",
+      "called": [
+        "investigate_incident"
+      ],
+      "outcomes": [
+        "answered_with_path"
+      ],
+      "tool_ok": true,
+      "fact_ok": true,
+      "llm_sentence_accepted": true,
+      "violations": [],
+      "answer": "The root cause of the open incident is payment, with a 94% relative confidence. The possible causes include issues with the frontend-proxy, frontend, checkout, and payment services.",
+      "wall_ms": 41133
+    }
+  ]
+}

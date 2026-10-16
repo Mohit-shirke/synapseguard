@@ -1,0 +1,1200 @@
+{
+  "protocol": "(mirrors RCAEval main.py): drop *_latency-50, ffill/fillna, take the\n10 minutes before the given injection time as normal and the 10 minutes after\nas abnormal; score with AC@k and Avg@5 on the root-cause service.\n\nAdapter (our choices, all fixed before looking at results):\n* Per metric robust z-score against the normal window (median / IQR, as BARO's\n  RobustScaler). Service anomaly = max |z| over its metrics in the abnormal window.\n  A service is degraded if max |z| >= Z; onset = first abnormal second where any of\n  its metrics crosses Z. anomaly = 0.2*z/Z below Z and 0.2 + 0.8*(1 - Z/z) above,\n  monotone and non-saturating, so \"degraded\" matches the product's 0.2 threshold.\n* Call graphs come from each system's source code (see CALL_GRAPHS). Train Ticket\n  is NOT evaluated with the graph: RE1 has no traces and we have no verified call\n  graph for its ~40 services.\n* The incident is reported on the user-facing entrypoint.\n* RE1 has no change log and no service->host placement, so the 'change' and\n  'common' features are always 0. Weights are the ones tuned on synthetic data;\n  nothing is tuned on RCAEval.\n* Ranking = graph candidates (in score order), then every remaining service by\n  anomaly, so AC@k is over a complete ranking like the other methods.",
+  "systems": {
+    "online-boutique": {
+      "z=3.0": {
+        "cases": 125,
+        "ours (product default: auto profile)": {
+          "cpu": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.6,
+            "AC@3": 1.0,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.24,
+            "AC@3": 0.6,
+            "Avg@5": 0.536,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.56,
+            "AC@3": 1.0,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.488,
+            "AC@3": 0.92,
+            "Avg@5": 0.8208,
+            "n": 125
+          }
+        },
+        "ours, evidence profile (synthetic-tuned weights)": {
+          "cpu": {
+            "AC@1": 0.4,
+            "AC@3": 0.72,
+            "Avg@5": 0.696,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.16,
+            "AC@3": 0.4,
+            "Avg@5": 0.432,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.24,
+            "AC@3": 0.64,
+            "Avg@5": 0.5680000000000001,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.08,
+            "AC@3": 0.32,
+            "Avg@5": 0.32,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.32,
+            "AC@3": 0.56,
+            "Avg@5": 0.552,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.24,
+            "AC@3": 0.528,
+            "Avg@5": 0.5136000000000001,
+            "n": 125
+          }
+        },
+        "max robust z (no graph; BARO-style scorer)": {
+          "cpu": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.6,
+            "AC@3": 1.0,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.24,
+            "AC@3": 0.6,
+            "Avg@5": 0.536,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.56,
+            "AC@3": 1.0,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.488,
+            "AC@3": 0.92,
+            "Avg@5": 0.8208,
+            "n": 125
+          }
+        },
+        "truth_degraded_rate": 1,
+        "truth_reachable_rate": 1,
+        "graph_latency_ms_p50": 13.171200000215322,
+        "graph_latency_ms_p95": 19.070580000334303
+      },
+      "z=5.0": {
+        "cases": 125,
+        "ours (product default: auto profile)": {
+          "cpu": {
+            "AC@1": 0.6,
+            "AC@3": 1.0,
+            "Avg@5": 0.896,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.64,
+            "AC@3": 1.0,
+            "Avg@5": 0.912,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.28,
+            "AC@3": 0.6,
+            "Avg@5": 0.544,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.56,
+            "AC@3": 1.0,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.52,
+            "AC@3": 0.92,
+            "Avg@5": 0.8272,
+            "n": 125
+          }
+        },
+        "ours, evidence profile (synthetic-tuned weights)": {
+          "cpu": {
+            "AC@1": 0.56,
+            "AC@3": 0.72,
+            "Avg@5": 0.776,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.2,
+            "AC@3": 0.68,
+            "Avg@5": 0.6,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.4,
+            "AC@3": 0.72,
+            "Avg@5": 0.672,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.2,
+            "AC@3": 0.52,
+            "Avg@5": 0.52,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.64,
+            "AC@3": 0.84,
+            "Avg@5": 0.792,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.4,
+            "AC@3": 0.696,
+            "Avg@5": 0.672,
+            "n": 125
+          }
+        },
+        "max robust z (no graph; BARO-style scorer)": {
+          "cpu": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.6,
+            "AC@3": 1.0,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.24,
+            "AC@3": 0.6,
+            "Avg@5": 0.536,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.56,
+            "AC@3": 1.0,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.488,
+            "AC@3": 0.92,
+            "Avg@5": 0.8208,
+            "n": 125
+          }
+        },
+        "truth_degraded_rate": 1,
+        "truth_reachable_rate": 1,
+        "graph_latency_ms_p50": 11.035899999114918,
+        "graph_latency_ms_p95": 15.483940000194707
+      },
+      "z=10.0": {
+        "cases": 125,
+        "ours (product default: auto profile)": {
+          "cpu": {
+            "AC@1": 0.68,
+            "AC@3": 1.0,
+            "Avg@5": 0.928,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.64,
+            "AC@3": 1.0,
+            "Avg@5": 0.912,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.28,
+            "AC@3": 0.6,
+            "Avg@5": 0.552,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.8,
+            "AC@3": 1.0,
+            "Avg@5": 0.952,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.584,
+            "AC@3": 0.92,
+            "Avg@5": 0.8448,
+            "n": 125
+          }
+        },
+        "ours, evidence profile (synthetic-tuned weights)": {
+          "cpu": {
+            "AC@1": 0.76,
+            "AC@3": 1.0,
+            "Avg@5": 0.936,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.44,
+            "AC@3": 0.76,
+            "Avg@5": 0.744,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.6,
+            "AC@3": 1.0,
+            "Avg@5": 0.888,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.44,
+            "AC@3": 0.6,
+            "Avg@5": 0.648,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.8,
+            "AC@3": 1.0,
+            "Avg@5": 0.952,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.608,
+            "AC@3": 0.872,
+            "Avg@5": 0.8336,
+            "n": 125
+          }
+        },
+        "max robust z (no graph; BARO-style scorer)": {
+          "cpu": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.6,
+            "AC@3": 1.0,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.24,
+            "AC@3": 0.6,
+            "Avg@5": 0.536,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.56,
+            "AC@3": 1.0,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.488,
+            "AC@3": 0.92,
+            "Avg@5": 0.8208,
+            "n": 125
+          }
+        },
+        "truth_degraded_rate": 0.96,
+        "truth_reachable_rate": 0.96,
+        "graph_latency_ms_p50": 10.397199999715667,
+        "graph_latency_ms_p95": 16.15386000048602
+      }
+    },
+    "sock-shop-2": {
+      "z=3.0": {
+        "cases": 125,
+        "ours (product default: auto profile)": {
+          "cpu": {
+            "AC@1": 0.56,
+            "AC@3": 1.0,
+            "Avg@5": 0.912,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.52,
+            "AC@3": 0.92,
+            "Avg@5": 0.848,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 1.0,
+            "AC@3": 1.0,
+            "Avg@5": 1.0,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.24,
+            "AC@3": 0.8,
+            "Avg@5": 0.7040000000000001,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.64,
+            "AC@3": 0.96,
+            "Avg@5": 0.896,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.592,
+            "AC@3": 0.936,
+            "Avg@5": 0.872,
+            "n": 125
+          }
+        },
+        "ours, evidence profile (synthetic-tuned weights)": {
+          "cpu": {
+            "AC@1": 0.08,
+            "AC@3": 0.4,
+            "Avg@5": 0.34400000000000003,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.12,
+            "AC@3": 0.48,
+            "Avg@5": 0.432,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.24,
+            "AC@3": 0.48,
+            "Avg@5": 0.416,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.08,
+            "AC@3": 0.28,
+            "Avg@5": 0.312,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.12,
+            "AC@3": 0.36,
+            "Avg@5": 0.384,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.128,
+            "AC@3": 0.4,
+            "Avg@5": 0.3776,
+            "n": 125
+          }
+        },
+        "max robust z (no graph; BARO-style scorer)": {
+          "cpu": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.872,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.44,
+            "AC@3": 0.88,
+            "Avg@5": 0.8240000000000001,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.96,
+            "AC@3": 1.0,
+            "Avg@5": 0.992,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.24,
+            "AC@3": 0.76,
+            "Avg@5": 0.68,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.68,
+            "AC@3": 0.96,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.568,
+            "AC@3": 0.92,
+            "Avg@5": 0.8543999999999999,
+            "n": 125
+          }
+        },
+        "truth_degraded_rate": 1,
+        "truth_reachable_rate": 1,
+        "graph_latency_ms_p50": 13.098700001137331,
+        "graph_latency_ms_p95": 17.966939998586895
+      },
+      "z=5.0": {
+        "cases": 125,
+        "ours (product default: auto profile)": {
+          "cpu": {
+            "AC@1": 0.6,
+            "AC@3": 1.0,
+            "Avg@5": 0.92,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.48,
+            "AC@3": 0.92,
+            "Avg@5": 0.832,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 1.0,
+            "AC@3": 1.0,
+            "Avg@5": 1.0,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.28,
+            "AC@3": 0.8,
+            "Avg@5": 0.7120000000000001,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.64,
+            "AC@3": 0.96,
+            "Avg@5": 0.896,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.6,
+            "AC@3": 0.936,
+            "Avg@5": 0.872,
+            "n": 125
+          }
+        },
+        "ours, evidence profile (synthetic-tuned weights)": {
+          "cpu": {
+            "AC@1": 0.28,
+            "AC@3": 0.48,
+            "Avg@5": 0.528,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.08,
+            "AC@3": 0.48,
+            "Avg@5": 0.44,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.2,
+            "AC@3": 0.48,
+            "Avg@5": 0.472,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.2,
+            "AC@3": 0.44,
+            "Avg@5": 0.44,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.2,
+            "AC@3": 0.52,
+            "Avg@5": 0.472,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.192,
+            "AC@3": 0.48,
+            "Avg@5": 0.4704,
+            "n": 125
+          }
+        },
+        "max robust z (no graph; BARO-style scorer)": {
+          "cpu": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.872,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.44,
+            "AC@3": 0.88,
+            "Avg@5": 0.8240000000000001,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.96,
+            "AC@3": 1.0,
+            "Avg@5": 0.992,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.24,
+            "AC@3": 0.76,
+            "Avg@5": 0.68,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.68,
+            "AC@3": 0.96,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.568,
+            "AC@3": 0.92,
+            "Avg@5": 0.8543999999999999,
+            "n": 125
+          }
+        },
+        "truth_degraded_rate": 1,
+        "truth_reachable_rate": 1,
+        "graph_latency_ms_p50": 13.53209999979299,
+        "graph_latency_ms_p95": 17.723860000114655
+      },
+      "z=10.0": {
+        "cases": 125,
+        "ours (product default: auto profile)": {
+          "cpu": {
+            "AC@1": 0.56,
+            "AC@3": 1.0,
+            "Avg@5": 0.912,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.56,
+            "AC@3": 0.92,
+            "Avg@5": 0.856,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 1.0,
+            "AC@3": 1.0,
+            "Avg@5": 1.0,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.24,
+            "AC@3": 0.8,
+            "Avg@5": 0.7040000000000001,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.68,
+            "AC@3": 0.96,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.608,
+            "AC@3": 0.936,
+            "Avg@5": 0.8752,
+            "n": 125
+          }
+        },
+        "ours, evidence profile (synthetic-tuned weights)": {
+          "cpu": {
+            "AC@1": 0.36,
+            "AC@3": 0.68,
+            "Avg@5": 0.68,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.24,
+            "AC@3": 0.76,
+            "Avg@5": 0.656,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.28,
+            "AC@3": 0.72,
+            "Avg@5": 0.648,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.2,
+            "AC@3": 0.6,
+            "Avg@5": 0.5680000000000001,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.4,
+            "AC@3": 0.72,
+            "Avg@5": 0.6960000000000001,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.296,
+            "AC@3": 0.696,
+            "Avg@5": 0.6496,
+            "n": 125
+          }
+        },
+        "max robust z (no graph; BARO-style scorer)": {
+          "cpu": {
+            "AC@1": 0.52,
+            "AC@3": 1.0,
+            "Avg@5": 0.872,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.44,
+            "AC@3": 0.88,
+            "Avg@5": 0.8240000000000001,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.96,
+            "AC@3": 1.0,
+            "Avg@5": 0.992,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.24,
+            "AC@3": 0.76,
+            "Avg@5": 0.68,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.68,
+            "AC@3": 0.96,
+            "Avg@5": 0.904,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.568,
+            "AC@3": 0.92,
+            "Avg@5": 0.8543999999999999,
+            "n": 125
+          }
+        },
+        "truth_degraded_rate": 1,
+        "truth_reachable_rate": 1,
+        "graph_latency_ms_p50": 12.592500001119333,
+        "graph_latency_ms_p95": 17.78591999936907
+      }
+    },
+    "train-ticket": {
+      "z=3.0": {
+        "cases": 125,
+        "ours (product default: auto profile)": {
+          "cpu": {
+            "AC@1": 0.44,
+            "AC@3": 0.84,
+            "Avg@5": 0.776,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.16,
+            "AC@3": 0.44,
+            "Avg@5": 0.4,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.84,
+            "AC@3": 1.0,
+            "Avg@5": 0.968,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.04,
+            "AC@3": 0.08,
+            "Avg@5": 0.128,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.6,
+            "AC@3": 0.96,
+            "Avg@5": 0.88,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.416,
+            "AC@3": 0.664,
+            "Avg@5": 0.6304,
+            "n": 125
+          }
+        },
+        "ours, evidence profile (synthetic-tuned weights)": {
+          "cpu": {
+            "AC@1": 0.04,
+            "AC@3": 0.2,
+            "Avg@5": 0.192,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.2,
+            "AC@3": 0.24,
+            "Avg@5": 0.264,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.08,
+            "AC@3": 0.08,
+            "Avg@5": 0.10400000000000001,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.0,
+            "AC@3": 0.04,
+            "Avg@5": 0.064,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.16,
+            "AC@3": 0.28,
+            "Avg@5": 0.24000000000000002,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.096,
+            "AC@3": 0.168,
+            "Avg@5": 0.1728,
+            "n": 125
+          }
+        },
+        "max robust z (no graph; BARO-style scorer)": {
+          "cpu": {
+            "AC@1": 0.32,
+            "AC@3": 0.84,
+            "Avg@5": 0.704,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.16,
+            "AC@3": 0.44,
+            "Avg@5": 0.392,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.8,
+            "AC@3": 1.0,
+            "Avg@5": 0.96,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.04,
+            "AC@3": 0.08,
+            "Avg@5": 0.12000000000000001,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.88,
+            "AC@3": 1.0,
+            "Avg@5": 0.968,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.44,
+            "AC@3": 0.672,
+            "Avg@5": 0.6288,
+            "n": 125
+          }
+        },
+        "truth_degraded_rate": 1,
+        "truth_reachable_rate": 1,
+        "graph_latency_ms_p50": 17.543099998874823,
+        "graph_latency_ms_p95": 23.633079999490292
+      },
+      "z=5.0": {
+        "cases": 125,
+        "ours (product default: auto profile)": {
+          "cpu": {
+            "AC@1": 0.36,
+            "AC@3": 0.84,
+            "Avg@5": 0.736,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.16,
+            "AC@3": 0.44,
+            "Avg@5": 0.4,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.8,
+            "AC@3": 1.0,
+            "Avg@5": 0.96,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.04,
+            "AC@3": 0.12,
+            "Avg@5": 0.144,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.68,
+            "AC@3": 1.0,
+            "Avg@5": 0.912,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.408,
+            "AC@3": 0.68,
+            "Avg@5": 0.6304,
+            "n": 125
+          }
+        },
+        "ours, evidence profile (synthetic-tuned weights)": {
+          "cpu": {
+            "AC@1": 0.12,
+            "AC@3": 0.36,
+            "Avg@5": 0.352,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.24,
+            "AC@3": 0.36,
+            "Avg@5": 0.384,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.04,
+            "AC@3": 0.12,
+            "Avg@5": 0.128,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.0,
+            "AC@3": 0.08,
+            "Avg@5": 0.08,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.24,
+            "AC@3": 0.32,
+            "Avg@5": 0.304,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.128,
+            "AC@3": 0.248,
+            "Avg@5": 0.2496,
+            "n": 125
+          }
+        },
+        "max robust z (no graph; BARO-style scorer)": {
+          "cpu": {
+            "AC@1": 0.32,
+            "AC@3": 0.84,
+            "Avg@5": 0.704,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.16,
+            "AC@3": 0.44,
+            "Avg@5": 0.392,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.8,
+            "AC@3": 1.0,
+            "Avg@5": 0.96,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.04,
+            "AC@3": 0.08,
+            "Avg@5": 0.12000000000000001,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.88,
+            "AC@3": 1.0,
+            "Avg@5": 0.968,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.44,
+            "AC@3": 0.672,
+            "Avg@5": 0.6288,
+            "n": 125
+          }
+        },
+        "truth_degraded_rate": 1,
+        "truth_reachable_rate": 1,
+        "graph_latency_ms_p50": 16.626200000246172,
+        "graph_latency_ms_p95": 22.97422000046936
+      },
+      "z=10.0": {
+        "cases": 125,
+        "ours (product default: auto profile)": {
+          "cpu": {
+            "AC@1": 0.44,
+            "AC@3": 0.8,
+            "Avg@5": 0.72,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.16,
+            "AC@3": 0.44,
+            "Avg@5": 0.4,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.8,
+            "AC@3": 0.96,
+            "Avg@5": 0.9279999999999999,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.04,
+            "AC@3": 0.12,
+            "Avg@5": 0.144,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.68,
+            "AC@3": 1.0,
+            "Avg@5": 0.928,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.424,
+            "AC@3": 0.664,
+            "Avg@5": 0.624,
+            "n": 125
+          }
+        },
+        "ours, evidence profile (synthetic-tuned weights)": {
+          "cpu": {
+            "AC@1": 0.24,
+            "AC@3": 0.48,
+            "Avg@5": 0.48,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.32,
+            "AC@3": 0.48,
+            "Avg@5": 0.496,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.04,
+            "AC@3": 0.2,
+            "Avg@5": 0.2,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.0,
+            "AC@3": 0.12,
+            "Avg@5": 0.08,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.28,
+            "AC@3": 0.36,
+            "Avg@5": 0.4,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.176,
+            "AC@3": 0.328,
+            "Avg@5": 0.3312,
+            "n": 125
+          }
+        },
+        "max robust z (no graph; BARO-style scorer)": {
+          "cpu": {
+            "AC@1": 0.32,
+            "AC@3": 0.84,
+            "Avg@5": 0.704,
+            "n": 25
+          },
+          "delay": {
+            "AC@1": 0.16,
+            "AC@3": 0.44,
+            "Avg@5": 0.392,
+            "n": 25
+          },
+          "disk": {
+            "AC@1": 0.8,
+            "AC@3": 1.0,
+            "Avg@5": 0.96,
+            "n": 25
+          },
+          "loss": {
+            "AC@1": 0.04,
+            "AC@3": 0.08,
+            "Avg@5": 0.12000000000000001,
+            "n": 25
+          },
+          "mem": {
+            "AC@1": 0.88,
+            "AC@3": 1.0,
+            "Avg@5": 0.968,
+            "n": 25
+          },
+          "ALL": {
+            "AC@1": 0.44,
+            "AC@3": 0.672,
+            "Avg@5": 0.6288,
+            "n": 125
+          }
+        },
+        "truth_degraded_rate": 0.992,
+        "truth_reachable_rate": 0.976,
+        "graph_latency_ms_p50": 15.001499999925727,
+        "graph_latency_ms_p95": 18.920439999055816
+      }
+    }
+  },
+  "leave_one_system_out": {
+    "online-boutique": {
+      "tuned_on": [
+        "sock-shop-2",
+        "train-ticket"
+      ],
+      "z": 10.0,
+      "weights": {
+        "frontier": 0.25,
+        "coverage": 4.0,
+        "onset": 1.0,
+        "change": 2.0,
+        "severity": 4.0,
+        "common": 2.0,
+        "exposed": 4.0,
+        "lag": 0.0
+      },
+      "train_avg5": 0.8096,
+      "test_avg5": 0.872,
+      "test_avg5_by_fault": {
+        "cpu": 0.936,
+        "delay": 0.944,
+        "disk": 0.92,
+        "loss": 0.608,
+        "mem": 0.952
+      },
+      "no_graph_max_z_avg5": 0.8208
+    },
+    "sock-shop-2": {
+      "tuned_on": [
+        "online-boutique",
+        "train-ticket"
+      ],
+      "z": 10.0,
+      "weights": {
+        "frontier": 0.0,
+        "coverage": 4.0,
+        "onset": 2.0,
+        "change": 2.0,
+        "severity": 4.0,
+        "common": 2.0,
+        "exposed": 4.0,
+        "lag": 0.0
+      },
+      "train_avg5": 0.8,
+      "test_avg5": 0.8928,
+      "test_avg5_by_fault": {
+        "cpu": 0.904,
+        "delay": 0.864,
+        "disk": 0.968,
+        "loss": 0.8,
+        "mem": 0.928
+      },
+      "no_graph_max_z_avg5": 0.8544
+    },
+    "train-ticket": {
+      "tuned_on": [
+        "online-boutique",
+        "sock-shop-2"
+      ],
+      "z": 10.0,
+      "weights": {
+        "frontier": 0.0,
+        "coverage": 1.0,
+        "onset": 2.0,
+        "change": 2.0,
+        "severity": 4.0,
+        "common": 2.0,
+        "exposed": 4.0,
+        "lag": 0.0
+      },
+      "train_avg5": 0.8952,
+      "test_avg5": 0.6528,
+      "test_avg5_by_fault": {
+        "cpu": 0.808,
+        "delay": 0.496,
+        "disk": 0.76,
+        "loss": 0.28,
+        "mem": 0.92
+      },
+      "no_graph_max_z_avg5": 0.6288
+    }
+  },
+  "graph_pruning_plus_severity": {
+    "online-boutique": {
+      "z=3.0": 0.8208,
+      "z=5.0": 0.8272,
+      "z=10.0": 0.8448
+    },
+    "sock-shop-2": {
+      "z=3.0": 0.872,
+      "z=5.0": 0.872,
+      "z=10.0": 0.8752
+    },
+    "train-ticket": {
+      "z=3.0": 0.6304,
+      "z=5.0": 0.6304,
+      "z=10.0": 0.624
+    }
+  }
+}

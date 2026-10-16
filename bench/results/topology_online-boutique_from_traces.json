@@ -1,0 +1,42 @@
+{
+ "entry": "frontend",
+ "edges": {
+  "checkoutservice": [
+   "currencyservice",
+   "emailservice",
+   "paymentservice",
+   "productcatalogservice"
+  ],
+  "frontend": [
+   "checkoutservice",
+   "currencyservice",
+   "productcatalogservice",
+   "recommendationservice"
+  ],
+  "recommendationservice": [
+   "productcatalogservice"
+  ]
+ },
+ "calls": {
+  "checkoutservice->currencyservice": 1194,
+  "checkoutservice->emailservice": 333,
+  "checkoutservice->paymentservice": 333,
+  "checkoutservice->productcatalogservice": 862,
+  "frontend->checkoutservice": 333,
+  "frontend->currencyservice": 26187,
+  "frontend->productcatalogservice": 42401,
+  "frontend->recommendationservice": 6485,
+  "recommendationservice->productcatalogservice": 6485
+ },
+ "services": [
+  "checkoutservice",
+  "currencyservice",
+  "emailservice",
+  "frontend",
+  "paymentservice",
+  "productcatalogservice",
+  "recommendationservice"
+ ],
+ "spans_used": 196572,
+ "source": "re2ob_checkoutservice_cpu_1.traces.parquet"
+}

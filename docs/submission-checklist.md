@@ -1,39 +1,30 @@
-# Final Competition Submission Checklist
+# Submission checklist
 
-**Event:** WeMakeDevs × FalkorDB Graph Hacks 2026  
-**Track:** Track 01 — *Agents That Act on Connected Data*  
-**Project:** SynapseGuard  
+Submission window (from the WeMakeDevs team page, 2026-10-16): opens **October 17, 2026, 1:03 AM IST**,
+closes **October 18, 2026, 11:59 PM IST**. The team cannot be changed after submitting.
+Never put the team join code in the repository or the video.
 
----
+## Done in the repository (verified)
 
-## 1. Submission Deliverables Checklist
+- [x] FalkorDB is load-bearing (R2/R3); graph-removed mode and ablations measured
+- [x] README with setup, graph data model, Cypher, track, AI disclosure
+- [x] `docker compose up -d --build` verified end to end (2026-10-16): pinned FalkorDB 6.0.2, healthcheck, non-root API
+- [x] Tests: 138 passing (`pytest tests`) against live FalkorDB
+- [x] Benchmarks with raw outputs in `bench/results/` (synthetic, real RCAEval RE1/RE2, scale)
+- [x] MCP server verified over stdio (`python -m scripts.mcp_smoke`); local LLM tool selection measured (`bench/eval_llm_agent.py`)
+- [x] Screenshots from the running app in `docs/img/`
+- [x] Third-party notices; no secrets in the repo (`.env` ignored)
 
-- [x] **1. Public Repository URL:**
-  * Clean codebase with open-source MIT License.
-  * No secrets, API keys, or `.env` credentials checked in.
-- [x] **2. Comprehensive README (`README.md`):**
-  * Clear overview and value proposition.
-  * System architecture diagram.
-  * Graph data model schema definition.
-  * Complete Cypher query listing with complexity notes.
-  * Single-command local reproduction instructions.
-- [x] **3. Mandatory FalkorDB Removal Test (`test_graph_removal.py`):**
-  * Automated ablation test comparing flat retrieval vs FalkorDB graph traversal.
-  * Documents the exact failure mode when FalkorDB is removed.
-- [x] **4. Reproducible Deployment:**
-  * `docker-compose.yml` for one-click deployment.
-  * `Dockerfile` for backend API service.
-  * `requirements.txt` and `.env.example` verified.
-- [x] **5. Interactive Demonstration Frontend:**
-  * Single-page responsive Cytoscape.js canvas showing real FalkorDB topology and live agent decision trails.
-- [x] **6. Video Demo:**
-  * 2–3 minute video recorded following [`docs/demo-script.md`](file:///x:/Graph%20Hacks%20Context%20for%20AI%20Agents/docs/demo-script.md).
-- [x] **7. AI Assistance Disclosure:**
-  * Statement included below and in README.
+## Only you can do
 
----
-
-## 2. AI Tool Disclosure Statement
-
-> *"In compliance with Rule 11 and Rule 12 of Graph Hacks 2026, AI coding assistants (Google Antigravity / Gemini / Claude) were used as research and pair-programming assistants during development. All architectural decisions, graph schema designs, Cypher traversal algorithms, ablation test implementations, and codebases were reviewed, understood, and validated by the author."*
-
+- [ ] Read `docs/walkthrough.md`; be able to explain the graph model, each Cypher query, the scoring and the max-flow step (Rules 12–13)
+- [ ] Decide the legacy files question (old `synapseguard/engine/traversal.py`, `agent.py`, `memory.py`, `api/server.py`, `core/db.py`, `core/schema.py`, `data/seed.py`, `data/scale_seed.py`, `frontend/`, `synapseguard/tests/`): remove them or keep them
+- [x] Git author for new commits set to Mohit Shirke (repo-local config). The two earlier commits still show `Independent Developer`; rewriting them is optional
+- [x] Team **Night Hunter** registered on WeMakeDevs (solo, leader Mohit Shirke)
+- [ ] Create the public GitHub repo and push
+- [ ] Record the demo video (2–3 min, script in `docs/demo-script.md`), upload, link it in README
+- [ ] Optional: live deployment (e.g. FalkorDB Cloud + a container host), then add the URL
+- [ ] Register on the WeMakeDevs page if not done; submit repo, video, deployment/setup, project info
+- [ ] Name the track: **Track 01 only** (see docs/competition.md)
+- [ ] Optional side prize: publish `docs/blog-post.md` (edit it into your own voice first)
+- [ ] Re-check the rules page for changes before submitting

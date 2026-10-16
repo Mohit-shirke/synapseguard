@@ -49,3 +49,12 @@ htmlcov/
 # OS generated
 .DS_Store
 Thumbs.db
+
+
+# SynapseGuard: benchmark inputs are downloaded, never committed
+bench/data/
+*.parquet
+RE1.zip
+RE2.zip
+chrome-tmp/
+.hypothesis/

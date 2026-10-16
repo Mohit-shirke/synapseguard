@@ -1,0 +1,15 @@
+##### re2-ob
+Avg@5-CPU:   0.59
+Avg@5-MEM:   0.65
+Avg@5-DISK:  0.76
+Avg@5-SOCKET: 0.69
+Avg@5-DELAY: 0.54
+Avg@5-LOSS:  0.57
+##### re2-ss
+Avg@5-CPU:   0.59
+Avg@5-MEM:   0.65
+Avg@5-DISK:  0.76
+Avg@5-SOCKET: 0.69
+Avg@5-DELAY: 0.54
+Avg@5-LOSS:  0.57
+# RCAEval commit 259ea4167160256a74ad30004aa3d96a998c846e

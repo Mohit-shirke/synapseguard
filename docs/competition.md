@@ -1,59 +1,77 @@
-# Competition Intelligence & Requirements Matrix
+# Competition: verified rules and compliance
 
-**Event:** Graph Hacks: Context for AI Agents  
-**Organizers:** WeMakeDevs × FalkorDB  
-**Live Window:** October 15, 12:01 AM IST to October 18, 11:59 PM IST, 2026  
-**Target Track:** Track 01 — *Agents That Act on Connected Data*  
-**Grand Prize:** iPhone 18 Pro  
-**Date Checked:** October 15, 2026 (Live Portal Verified)  
+Source pages fetched 2026-10-15 (local curl):
+<https://www.wemakedevs.org/hackathons/falkordb>,
+<https://www.wemakedevs.org/hackathons/falkordb/rules>,
+<https://www.wemakedevs.org/hackathons/falkordb/schedule>,
+<https://www.wemakedevs.org/hackathons/falkordb/resources>.
+The rules page notes that rules "may be updated before the hackathon begins".
+Re-check before submitting.
 
----
+**Event:** Graph Hacks: Context for AI Agents, by WeMakeDevs in collaboration with FalkorDB.
+**Window:** October 15, 12:01 AM IST to **October 18, 11:59 PM IST** (2026). Submissions close at the end.
+**Entry:** individual, team **Night Hunter** (Mohit Shirke). Rule 1 allows solo or teams of up to 4.
+**Track entered:** **Track 01, Agents That Act on Connected Data** only (see "Track decision").
+**Prizes (Rule 14):** iPhone 18 Pro (Track 01), PS5 with GTA VI (Track 02), M6 Mac Mini (Track 03);
+side prizes: AirPods 5 for the best blog post, t-shirts for the top 50.
+**Judging criteria:** **not published.** The Track 01 "key focus" list is used as the proxy:
+multi-hop reasoning, graph queries and algorithms as agent tools, tool selection through MCP,
+actions based on what the graph shows, explainable results.
 
-## 1. Official Mandatory Deliverables Checklist
+## Track decision
 
-- [x] **Public Source Code Repository:** Fully structured, licensed open-source repo.
-- [x] **Comprehensive README:** Installation, startup instructions, full graph data model, and schema diagrams.
-- [x] **Cypher Queries & Graph Algorithms:** Documented queries and algorithmic complexity breakdown.
-- [x] **FalkorDB Removal Test:** Automated ablation testing proving the system fails without graph traversal.
-- [x] **Working Demo Video:** Showing real graph traversal, evidence chains, and decision actions.
-- [x] **Reproducible Local Deployment:** Docker Compose one-click setup + clean local runtime setup.
-- [x] **Declared Track:** Explicitly entering Track 01 (*Agents That Act on Connected Data*).
-- [x] **AI Assistance Disclosure:** Fully disclosed tool usage (Gemini / Claude / local models) with explanation of human engineering decisions.
+Rule 5 says "You may enter any or all of them". The organisers' article (WeMakeDevs blog,
+*How to Build an Agent That Reasons Over a Graph*, 2026-10-15, linked from the Resources
+page on 2026-10-16) says "You enter one track, and one submission is judged in it."
+Entering **only Track 01** is compliant under both readings. Track 03 (Company Brain)
+asks for knowledge from documents, tickets and chats; SynapseGuard's people layer
+(owners, on-call, authors) is a slice of that, not a company brain, so we do not enter it.
 
----
+## Alignment with the organisers' guidance (same article)
 
-## 2. Hard Disqualification Rules & Constraints
+| Their recommendation | SynapseGuard |
+|---|---|
+| Graph does work the agent could not do without it | anomalous-subgraph pruning, evidence paths, blast radius, max-flow breakers; graph-removed mode measured |
+| Fixed tool catalogue, agent never writes Cypher | 8 human-written tools (`engine/tools.py`), MCP server; free-form Cypher off by default |
+| Resolve names against the database | every name argument resolved first; "Postgres" → `postgresql` |
+| Four answer shapes incl. "not in the graph" vs "unknown" | `answered_with_path`, `answered_from_memory`, `not_in_graph`, `unknown_entity` |
+| Algorithms as tools (SPpaths, PageRank, max flow) | `path_between` (SPpaths), `load_bearing` (PageRank), breaker min-cut (maxFlow) |
+| Memory as nodes, read before reasoning | Investigation/Action/AFFECTED/CONFIRMED_ROOT_CAUSE; `recall`, similar-incident recall |
+| Return the path with every answer | every tool returns hop paths; evidence items cite graph elements |
+| Check the model's sentence; fall back to rows | grounding check (case-insensitive) in narrator and LLM agent |
+| Demo: depth 1 vs depth 4; ask about something not in the graph | UI chips and `scripts/mcp_smoke.py` |
+| `ro_query` for anything that is not a write | all read tools; optional Cypher via `GRAPH.RO_QUERY` |
 
-1. **FalkorDB Load-Bearing Rule (Rule 2 & 3):**
-   * FalkorDB must be the primary graph database.
-   * If FalkorDB is removed and the product functions identically on flat relational/vector storage, the project is disqualified.
-   * *SynapseGuard Compliance:* Without FalkorDB, multi-hop root-cause isolation cannot resolve causal directionality across downstream microservice call paths.
-2. **Permitted Data Sources (Rule 6):**
-   * Must use public, synthetic, or authorized data. No private, login-protected, or restricted data.
-   * *SynapseGuard Compliance:* 100% synthetic, deterministic telemetry generator based on standard distributed tracing graphs (OpenTelemetry-compliant).
-3. **Event Window (Rule 7 & 8):**
-   * Main implementation created during Oct 15–18, 2026.
-   * *SynapseGuard Compliance:* Clean-slate workspace initialized and built within the live hackathon window.
+**Beyond their Blast Radius demo** (impact, on-call, recent changes): SynapseGuard finds
+the **root cause** with an evidence model evaluated on 1,250 synthetic and 645 real
+fault-injection cases, places **circuit breakers by min-cut**, runs a human-approved
+**action lifecycle**, and documents two FalkorDB bugs with minimal reproductions.
 
----
+## Compliance matrix
 
-## 3. Official Tracks Overview
+| Requirement | Official text (abridged) | Status | Evidence |
+|---|---|---|---|
+| R1 team size | solo or up to 4 | ✅ solo | — |
+| R2 FalkorDB primary, central | "must support a central part of what the product does" | ✅ | every investigation step queries FalkorDB; `algo.maxFlow`; memory graph |
+| R3 graph does real work | "if the product still works once FalkorDB is taken out, the graph is decoration" | ✅ | graph-removed mode loses path, pruning, blast radius, breakers; synthetic top-1 0.952 vs 0.816 flat. **Caveat:** on real metrics-only data ranking is on par with a no-graph baseline (docs/evaluation.md) |
+| R4 how FalkorDB runs | Docker, self-hosted or Cloud | ✅ | `docker-compose.yml` pins `falkordb/falkordb:6.0.2`; Cloud via `FALKORDB_USERNAME/PASSWORD` (untested) |
+| R5 name every track | — | ⏳ you | name Track 01 in the submission form |
+| R6 allowed data | public, synthetic or own | ✅ | synthetic scenarios; topology from the Apache-2.0 OTel Demo; RCAEval (CC-BY-4.0) downloaded for evaluation, not committed |
+| R7 window | Oct 15 00:01 – Oct 18 23:59 IST | ✅ | first commit 2026-10-15 00:47 IST |
+| R8 main work after start | "main coding and design work must begin after the hackathon starts" | ✅ | git history |
+| R9 libraries allowed | frameworks, OSS, public datasets | ✅ | THIRD_PARTY_NOTICES.md |
+| R10 public repo | — | ⏳ you | push and make public |
+| R10 README: setup + graph model | — | ✅ | README.md, docs/graph-model.md |
+| R10 Cypher / algorithms | — | ✅ | docs/graph-model.md, docs/algorithm.md |
+| R10 demo video | — | ⏳ you | script: docs/demo-script.md |
+| R10 deployment or local setup | "live deployment preferred" | ✅ local; ⏳ live deployment optional | README quickstart |
+| R10 track named | — | ⏳ you | form + README |
+| R11 AI assistance disclosed | — | ✅ | README "AI assistance" section |
+| R12 explain the code | must explain model, queries, architecture | ⏳ **you** | docs/walkthrough.md written to help |
+| R13 not entirely AI-generated | meaningful contribution and understanding | ⚠ **risk** | see note below |
+| R16–18 conduct | — | ✅ | — |
 
-| Track | Title | Core Focus | Prize | SynapseGuard Fit |
-| :--- | :--- | :--- | :--- | :--- |
-| **Track 01 (Primary)** | **Agents That Act on Connected Data** | Leveraging multi-hop connected data to make traceable, context-aware decisions | iPhone 18 Pro | **100% Match** — Primary target |
-| **Track 02 (Secondary)** | **Agent Memory & Coordination** | Long-term memory across sessions and multi-agent coordination | PS5 + GTA VI | Compatible via persistent graph memory |
-| **Track 03** | **Company Brain** | Organizational knowledge graph connecting people, code, and docs | M6 Mac mini | Alternative track |
-
----
-
-## 4. Key Resources & References
-
-- Official Portal: `https://www.wemakedevs.org/hackathons/falkordb`
-- Rules: `https://www.wemakedevs.org/hackathons/falkordb/rules`
-- Schedule: `https://www.wemakedevs.org/hackathons/falkordb/schedule`
-- Resources: `https://www.wemakedevs.org/hackathons/falkordb/resources`
-- FalkorDB Documentation: `https://docs.falkordb.com/`
-- FalkorDB Python Client: `https://github.com/FalkorDB/falkordb-py`
-- GraphRAG SDK: `https://github.com/FalkorDB/GraphRAG-SDK`
-
+**Note on R12/R13.** This codebase was produced with heavy AI assistance (see the
+README disclosure). Judges may ask you to explain any query or design decision.
+Before submitting, read docs/walkthrough.md, run the tests and the demo yourself,
+and make at least the decisions in "Things only you should decide" your own.
