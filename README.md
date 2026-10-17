@@ -34,8 +34,8 @@ Team **Night Hunter**: Mohit Sachin Shirke (solo entry).
 
 ## Demo video
 
-**Video (2:49):** [synapseguard-demo.mp4](https://github.com/Mohit-shirke/synapseguard/releases/download/v1.0.0/synapseguard-demo.mp4),
-a narrated walkthrough recorded on the live app. Script, timestamps and the source of every number:
+**Video (2:49):** <https://youtu.be/4bFKqncGUlU>, a narrated walkthrough recorded on the live app
+([download the mp4](https://github.com/Mohit-shirke/synapseguard/releases/download/v1.0.0/synapseguard-demo.mp4)). Script, timestamps and the source of every number:
 [docs/demo-script.md](docs/demo-script.md).
 
 **Try it in the browser:** <https://mohit-shirke.github.io/synapseguard/>: a recorded demo of the real
