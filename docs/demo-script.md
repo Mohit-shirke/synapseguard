@@ -1,23 +1,37 @@
-# Demo video script (about 3 minutes)
+# Demo video script (2:49)
 
-A captioned, silent version built only from live screenshots of the running app already exists at
-`submission/synapseguard-demo.mp4` (2:21). This script is for a narrated recording.
+Narration and on-screen action of the submitted demo video. Every product scene is a
+continuous screen recording of the live app (light theme), and every number said is the one on
+screen or in `bench/results/`. The scenarios use synthetic telemetry on the real OpenTelemetry
+Demo topology.
 
-Record at 1440×900. Before recording: `docker compose up -d` (or uvicorn),
-`curl -X POST "http://127.0.0.1:8000/api/reset?confirm=true"`, then open
-**http://127.0.0.1:8000** (use 127.0.0.1: an old service worker from another
-project may hijack `localhost:8000` in your browser). Everything shown is live;
-say once that the scenarios use synthetic telemetry on the real OpenTelemetry
-Demo topology. Optional pre-warm: ask the LLM one question before recording so
-the model is loaded.
-
-| Time | Show | Say |
+| Time | On screen | Narration |
 |---|---|---|
-| 0:00–0:15 | Graph | "When checkout breaks, the alert fires on the front door. The cause is usually hops away, and the first twenty minutes go into finding it and finding who owns it." |
-| 0:15–0:40 | Load **payment-flag** → Investigate. Point at the **Root cause** banner | "SynapseGuard follows the call graph in FalkorDB from the alerting service, only into unhealthy services. Root cause: Payment, a paymentFailure flag that landed 79 seconds before Payment degraded. And it tells me who to page: Alice, on call for the owning team, who also authored the flag change. Every line has its graph path." |
-| 0:40–1:00 | **Graph removed** tile, timeline | "Same signals without relationships blame a flapping decoy. The timeline shows why the graph answer holds: Payment broke first, its callers followed within a minute." |
-| 1:00–1:25 | Ask chips: **depth 1**, then **depth 4** | "What breaks if Payment goes down? One hop: Checkout, something a join could tell you. Four hops: six services, including the chatbot, via agent, frontend, checkout. Every path is shown." |
-| 1:25–1:40 | Chip **Unknown: payments-gateway** | "Ask about something that isn't in the graph and it says so, and suggests 'payment'. No query runs on a name that doesn't resolve." |
-| 1:40–2:05 | Blast radius card, breakers; approve + execute rollback; Investigate again; Confirm | "It places circuit breakers with FalkorDB's max-flow algorithm. Actions need a human. After the simulated rollback, only unrelated noise remains, and confirming the root cause writes memory." |
-| 2:05–2:35 | Type "Postgres is down, who do I wake?" → **Ask LLM** (or terminal `python -m scripts.mcp_smoke`) | "A local model picks from a fixed catalogue of human-written graph tools over MCP. It never writes Cypher; names are resolved against the graph; its sentence is rejected if it names anything the tools didn't return. 12 out of 12 tool choices correct in our test." |
-| 2:35–3:00 | `docs/evaluation.md` table | "Measured: 95% top-1 on held-out synthetic incidents versus 82% without the graph. On real fault-injection data from RCAEval, ranking is on par with a strong baseline, and the repo says exactly that." |
+| 0:00 | Title: SynapseGuard · Mohit Sachin Shirke · team Night Hunter · Track 01 | "A smoke alarm tells you there is a fire, but never which room it started in. I am Mohit Sachin Shirke, from team Night Hunter. In the next two minutes, you'll see an agent that walks from the alarm to the room where it began, and shows every step. It's called SynapseGuard, built on FalkorDB." |
+| 0:19 | Card: the problem | "Modern software is a building with hundreds of rooms. When checkout fails, the alert fires at the front door, while the cause sits a few calls away, and engineers lose precious minutes." |
+| 0:29 | **paymentFailure flag** scenario → **Load scenario** | "An incident is reported on the frontend proxy. Everything in red is degraded. So which service actually started it?" |
+| 0:38 | **Investigate** → root-cause banner, causal path on the graph | "First, find the cause. One click, and the agent walks the graph through unhealthy services only. Root cause: payment, at ninety-four percent confidence. A feature flag landed seventy-nine seconds before it degraded, so: page Alice, the on-call owner." |
+| 0:53 | Incident timeline, Who to page | "Crucially, it shows its working. Payment degraded first, and its callers followed within a minute. Every answer comes with its path." |
+| 1:02 | Ask the graph: **What breaks? depth 1** | "Second, ask the graph, through fixed, human-written tools. What breaks if payment goes down? One hop out, a single service." |
+| 1:11 | **What breaks? depth 4** | "Four hops out, six services, including the chatbot, each with its path." |
+| 1:15 | **Unknown: payments-gateway** | "Ask about a service that doesn't exist, and no query runs. It suggests the closest real one." |
+| 1:21 | Blast radius and `algo.maxFlow` breaker plan → **Approve** → **Execute (simulated)** | "Third, contain it. The agent computes the blast radius and places circuit breakers with FalkorDB's max flow algorithm. Nothing runs without a human: approve, then execute." |
+| 1:34 | **Investigate** again → mcp, 78%, "verify" | "After the approved rollback, payment is healthy again. A second, unrelated fault is flagged for verification at seventy-eight percent. It knows when it's guessing." |
+| 1:44 | **Silent PostgreSQL** scenario → postgresql vs graph-removed *cache* (Disagrees) | "Now, the surprise. With no change record at all, the graph still finds the database. Remove the relationships, and the very same signals blame the wrong service. The graph is not decoration. It is the reasoning." |
+| 1:59 | **Saturated Kubernetes node** scenario → node-c | "When a Kubernetes node is saturated, it blames the shared host, not each service on it." |
+| 2:04 | Card: same tools over MCP | "The same tools are an MCP server. A local model chose the right tool twelve out of twelve times, and never writes a query or approves an action." |
+| 2:15 | Card: measured, not claimed | "On five hundred held-out incidents, it ranks the true cause first ninety-five percent of the time, against eighty-two without the graph. On six hundred and forty-five real fault-injection cases, it is on par with a strong baseline, and the repository says so openly. Along the way, I found two FalkorDB bugs." |
+| 2:35 | Closing: repository and recorded-demo links | "So, four contributions: a root cause you can verify; answers only from the graph; containment that waits for a human; and honest results. Every answer comes with its path. I'm Mohit Shirke, team Night Hunter." |
+
+## Reproduce the scenes
+
+```bash
+docker compose up -d --build
+curl -X POST "http://127.0.0.1:8000/api/reset?confirm=true"
+```
+
+Open <http://127.0.0.1:8000> and follow the "On screen" column. Sources of the numbers:
+94% / 79 s / Alice Moreau, depth 1 vs 4, the unknown name and the 78% verify flag are live
+results; 95.2% vs 81.6% is `bench/results/accuracy_otel.json`; 645 RCAEval cases are
+`bench/results/rcaeval_re*.json`; 12 / 12 tool choices is `bench/results/llm_agent.json`;
+the two FalkorDB bugs are in [upstream-issues.md](upstream-issues.md).
