@@ -288,8 +288,8 @@ let cy, incident = null, last = null, scenarios = [];
 // Recorded-demo mode (GitHub Pages): replay real responses captured from the live app
 // by scripts/build_static_site.py. Writes and the local LLM need the live app.
 const STATIC = location.hostname.endsWith("github.io") || new URLSearchParams(location.search).get("static") === "1";
-// The recorded demo opens in the light theme, as in the demo video (?theme=dark still works).
-if (STATIC && !new URLSearchParams(location.search).get("theme")) document.documentElement.dataset.theme = "light";
+// Light theme by default (as in the demo video); ?theme=dark opts into the dark theme.
+document.documentElement.dataset.theme = new URLSearchParams(location.search).get("theme") === "dark" ? "dark" : "light";
 let staticScenario = null, staticMeta = null;
 const toolKey = (tool, args) => (tool + "__" + Object.keys(args).sort().map(k => `${k}-${args[k]}`).join("_"))
   .replace(/[^A-Za-z0-9_.-]/g, "_");
