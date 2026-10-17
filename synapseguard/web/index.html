@@ -35,6 +35,8 @@
   --red-fill: #ff453a2e; --green-fill: #30d1582e; --orange-fill: #ff9f0a2e; --blue-fill: #0a84ff2e; --purple-fill: #bf5af22e;
   --canvas: #111113; --edge: #48484a; --focus: #409cff; --shadow: none;
 }
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 72px; }
 body { margin: 0; background: var(--bg); color: var(--label); font: 15px/1.47 var(--font); letter-spacing: -.01em; }
@@ -286,6 +288,8 @@ let cy, incident = null, last = null, scenarios = [];
 // Recorded-demo mode (GitHub Pages): replay real responses captured from the live app
 // by scripts/build_static_site.py. Writes and the local LLM need the live app.
 const STATIC = location.hostname.endsWith("github.io") || new URLSearchParams(location.search).get("static") === "1";
+// The recorded demo opens in the light theme, as in the demo video (?theme=dark still works).
+if (STATIC && !new URLSearchParams(location.search).get("theme")) document.documentElement.dataset.theme = "light";
 let staticScenario = null, staticMeta = null;
 const toolKey = (tool, args) => (tool + "__" + Object.keys(args).sort().map(k => `${k}-${args[k]}`).join("_"))
   .replace(/[^A-Za-z0-9_.-]/g, "_");
@@ -604,6 +608,7 @@ init().then(async () => {
   if (q.get("scenario")) { $("scenario").value = q.get("scenario"); }
   if (q.get("auto") === "1") { await $("load").onclick(); await $("go").onclick(); }
   else if (q.get("go") === "1" && incident) { await $("go").onclick(); }  // investigate the open incident as it is now
+  else if (STATIC && incident && !q.get("scenario")) { await $("go").onclick(); }  // recorded demo opens on the answer
   if (q.get("chip")) $("chips").querySelectorAll("button")[+q.get("chip")]?.click();
 }).catch(e => toast(e.message));
 </script>
