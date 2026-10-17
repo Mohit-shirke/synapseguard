@@ -22,7 +22,8 @@ Never put the team join code in the repository or the video.
 - [x] Git author for new commits set to Mohit Shirke (repo-local config). The two earlier commits still show `Independent Developer`; rewriting them is optional
 - [x] Team **Night Hunter** registered on WeMakeDevs (solo, leader Mohit Shirke)
 - [ ] Create the public GitHub repo and push
-- [ ] Record the demo video (2–3 min, script in `docs/demo-script.md`), upload, link it in README
+- [x] Captioned demo video built from live app screenshots: `submission/synapseguard-demo.mp4` (2:21, not committed)
+- [ ] Upload the video (YouTube unlisted or Google Drive), add the link to the submission form and README. Optional: record a narrated version using `docs/demo-script.md`
 - [ ] Optional: live deployment (e.g. FalkorDB Cloud + a container host), then add the URL
 - [ ] Register on the WeMakeDevs page if not done; submit repo, video, deployment/setup, project info
 - [ ] Name the track: **Track 01 only** (see docs/competition.md)

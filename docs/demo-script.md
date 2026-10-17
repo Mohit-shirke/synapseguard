@@ -1,5 +1,8 @@
 # Demo video script (about 3 minutes)
 
+A captioned, silent version built only from live screenshots of the running app already exists at
+`submission/synapseguard-demo.mp4` (2:21). This script is for a narrated recording.
+
 Record at 1440×900. Before recording: `docker compose up -d` (or uvicorn),
 `curl -X POST "http://127.0.0.1:8000/api/reset?confirm=true"`, then open
 **http://127.0.0.1:8000** (use 127.0.0.1: an old service worker from another

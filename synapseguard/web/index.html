@@ -89,6 +89,7 @@ select { max-width: 100%; }
 .empty { color: var(--label-3); font-size: 14px; }
 .rc-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0 0 16px; padding: 14px 16px;
   border-radius: var(--r-lg); background: var(--surface); box-shadow: var(--shadow); border-left: 4px solid var(--red); }
+.rc-banner[hidden] { display: none; }
 .rc-banner .k { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--label-3); }
 .rc-banner .v { font-family: var(--mono); font-size: 22px; font-weight: 700; overflow-wrap: anywhere; }
 .rc-banner .why { flex: 1 1 320px; min-width: 0; color: var(--label-2); font-size: 14px; }
@@ -567,6 +568,7 @@ init().then(async () => {
   if (q.get("theme")) cy.style(graphStyle());
   if (q.get("scenario")) { $("scenario").value = q.get("scenario"); }
   if (q.get("auto") === "1") { await $("load").onclick(); await $("go").onclick(); }
+  else if (q.get("go") === "1" && incident) { await $("go").onclick(); }  // investigate the open incident as it is now
   if (q.get("chip")) $("chips").querySelectorAll("button")[+q.get("chip")]?.click();
 }).catch(e => toast(e.message));
 </script>
