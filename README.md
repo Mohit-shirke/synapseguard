@@ -227,11 +227,6 @@ bench/                 accuracy, real-world (RCAEval) and scale benchmarks + res
 tests/                 pytest suite (live FalkorDB)         docs/   design, evaluation, demo script
 ```
 
-The old v1 modules (`synapseguard/engine/{agent,memory,traversal}.py`,
-`synapseguard/api/server.py`, `synapseguard/core/{db,schema}.py`,
-`synapseguard/data/{seed,scale_seed}.py`, `synapseguard/frontend/`,
-`synapseguard/tests/`) are superseded and not used by v2.
-
 ## AI assistance disclosure (Rule 11)
 
 AI coding assistants were used during development. Mohit Shirke is responsible for the
