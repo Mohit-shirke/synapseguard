@@ -1,6 +1,6 @@
 # What a graph actually buys an incident agent (and what it doesn't)
 
-*By Mohit Shirke (team Night Hunter). Draft for the Graph Hacks blog-post side prize; edit it into your own voice before publishing.*
+*By Mohit Sachin Shirke (team Night Hunter). Draft for the Graph Hacks blog-post side prize; edit it into your own voice before publishing.*
 
 When checkout breaks, the page fires on the front door: the proxy returns 5xx,
 the frontend's latency spikes. The cause is usually somewhere those services

@@ -3,7 +3,7 @@
 **An incident agent that finds where a microservice failure started by following the call graph in FalkorDB, explains why with graph evidence, and proposes containment a human can approve.**
 
 Graph Hacks: Context for AI Agents (WeMakeDevs × FalkorDB), **Track 01: Agents That Act on Connected Data** (only).
-Team **Night Hunter**: Mohit Shirke (solo entry).
+Team **Night Hunter**: Mohit Sachin Shirke (solo entry).
 
 ![SynapseGuard investigating a live incident: root cause, causal path, breaker, who to page, depth-1 vs depth-4 blast radius, an unknown name refused](docs/img/hero.gif)
 
