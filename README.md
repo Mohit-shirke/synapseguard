@@ -1,5 +1,10 @@
 # SynapseGuard
 
+[![ci](https://github.com/Mohit-shirke/synapseguard/actions/workflows/ci.yml/badge.svg)](https://github.com/Mohit-shirke/synapseguard/actions/workflows/ci.yml)
+[![Live demo](https://img.shields.io/badge/live%20demo-GitHub%20Pages-0066cc)](https://mohit-shirke.github.io/synapseguard/)
+[![FalkorDB 6.0.2](https://img.shields.io/badge/FalkorDB-6.0.2-d70015)](docker-compose.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-248a3d)](LICENSE)
+
 **An incident agent that finds where a microservice failure started by following the call graph in FalkorDB, explains why with graph evidence, and proposes containment a human can approve.**
 
 Graph Hacks: Context for AI Agents (WeMakeDevs × FalkorDB), **Track 01: Agents That Act on Connected Data** (only).
