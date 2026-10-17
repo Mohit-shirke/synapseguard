@@ -1,0 +1,16 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "path_between",
+ "args": {
+  "source": "frontend-proxy",
+  "target": "product-catalog"
+ },
+ "path": [
+  "frontend-proxy",
+  "frontend",
+  "product-catalog"
+ ],
+ "weight": 2,
+ "answer": "frontend-proxy depends on product-catalog: frontend-proxy -> frontend -> product-catalog",
+ "ms": 3.13
+}

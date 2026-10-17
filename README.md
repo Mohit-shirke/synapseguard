@@ -31,6 +31,10 @@ Team **Night Hunter**: Mohit Shirke (solo entry).
 
 **Video:** _link added at submission_ (2–3 min walkthrough of the live app).
 
+**Try it in the browser:** <https://mohit-shirke.github.io/synapseguard/>: a recorded demo of the real
+UI replaying responses captured from the running app (all five scenarios, investigations, Ask
+chips). Approve/execute and the local LLM need the live app: `docker compose up -d --build`.
+
 ## The problem
 
 When a request path breaks, the alert fires on the front door (proxy 5xx,

@@ -1,0 +1,19 @@
+{
+ "outcome": "answered_from_memory",
+ "tool": "recall",
+ "args": {
+  "service": "postgresql"
+ },
+ "resolved": {
+  "status": "found",
+  "id": "postgresql",
+  "label": "Service",
+  "name": "astronomy-db (PostgreSQL)",
+  "query": "postgresql",
+  "exact": true
+ },
+ "memories": [],
+ "incidents_affected": 1,
+ "answer": "postgresql was the confirmed root cause of 0 past incident(s) and affected in 1.",
+ "ms": 3.84
+}

@@ -1,0 +1,29 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "blast_radius",
+ "args": {
+  "service": "quote",
+  "depth": 1
+ },
+ "resolved": {
+  "status": "found",
+  "id": "quote",
+  "label": "Service",
+  "name": "Quote",
+  "query": "quote",
+  "exact": true
+ },
+ "paths": [
+  {
+   "service": "shipping",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "shipping",
+    "quote"
+   ]
+  }
+ ],
+ "answer": "1 services depend on quote within 1 hops: shipping",
+ "ms": 2.36
+}

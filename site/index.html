@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SynapseGuard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
+<style>
+/* Design tokens. Semantic colours follow Apple's system palette (light/dark variants);
+   layout and states follow the ui-ux-pro-max incident-management profile. */
+:root {
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+  --bg: #f2f2f7; --surface: #ffffff; --surface-2: #f2f2f7; --material: rgba(249,249,251,.78);
+  --label: #1c1c1e; --label-2: #3c3c43cc; --label-3: #3c3c4399; --separator: #c6c6c8;
+  --red: #d70015; --green: #248a3d; --orange: #c93400; --yellow: #a05a00; --blue: #0066cc; --purple: #8944ab; --gray: #8e8e93;
+  --red-fill: #ff3b301f; --green-fill: #34c7591f; --orange-fill: #ff95001f; --blue-fill: #007aff1a; --purple-fill: #af52de1f;
+  --canvas: #fbfbfd; --edge: #c7c7cc; --focus: #0071e3;
+  --r-lg: 16px; --r-md: 12px; --r-sm: 8px; --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #000000; --surface: #1c1c1e; --surface-2: #2c2c2e; --material: rgba(28,28,30,.72);
+    --label: #ffffff; --label-2: #ebebf5cc; --label-3: #ebebf599; --separator: #38383a;
+    --red: #ff6961; --green: #30d158; --orange: #ff9f0a; --yellow: #ffd60a; --blue: #409cff; --purple: #da8fff; --gray: #98989d;
+    --red-fill: #ff453a2e; --green-fill: #30d1582e; --orange-fill: #ff9f0a2e; --blue-fill: #0a84ff2e; --purple-fill: #bf5af22e;
+    --canvas: #111113; --edge: #48484a; --focus: #409cff; --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #000000; --surface: #1c1c1e; --surface-2: #2c2c2e; --material: rgba(28,28,30,.72);
+  --label: #ffffff; --label-2: #ebebf5cc; --label-3: #ebebf599; --separator: #38383a;
+  --red: #ff6961; --green: #30d158; --orange: #ff9f0a; --yellow: #ffd60a; --blue: #409cff; --purple: #da8fff; --gray: #98989d;
+  --red-fill: #ff453a2e; --green-fill: #30d1582e; --orange-fill: #ff9f0a2e; --blue-fill: #0a84ff2e; --purple-fill: #bf5af22e;
+  --canvas: #111113; --edge: #48484a; --focus: #409cff; --shadow: none;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 72px; }
+body { margin: 0; background: var(--bg); color: var(--label); font: 15px/1.47 var(--font); letter-spacing: -.01em; }
+@media (max-width: 700px) { body { font-size: 16px; } }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* top bar: translucent material, recedes behind content */
+.bar { position: sticky; top: 0; z-index: 30; display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center;
+  padding: 10px 16px; background: var(--material); backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: .5px solid var(--separator); }
+.bar > * { min-width: 0; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 17px; margin-right: auto; }
+.brand svg { color: var(--blue); }
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--label-2); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray); flex: none; }
+.status.ok .dot { background: var(--green); } .status.bad .dot { background: var(--red); }
+select, .btn { min-height: 44px; font: inherit; font-size: 15px; border-radius: var(--r-sm); border: .5px solid var(--separator);
+  background: var(--surface); color: var(--label); padding: 0 14px; cursor: pointer; }
+select { max-width: 100%; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500; transition: background .15s, opacity .15s; }
+.btn:hover { background: var(--surface-2); }
+.btn.primary { background: var(--blue); border-color: transparent; color: #fff; }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.danger { color: var(--red); }
+.btn[disabled] { opacity: .45; cursor: default; }
+.btn.small { min-height: 36px; font-size: 14px; padding: 0 12px; }
+.spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin .8s linear infinite; display: none; }
+.btn[aria-busy="true"] .spinner { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.wrap { max-width: 1440px; margin: 0 auto; padding: 16px; }
+.hero { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 16px; margin: 8px 4px 16px; }
+.hero > * { min-width: 0; }
+.hero h1 { font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: -.02em; margin: 0; overflow-wrap: anywhere; }
+.hero p { margin: 4px 0 0; color: var(--label-2); max-width: 80ch; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 99px;
+  background: var(--surface-2); color: var(--label-2); max-width: 100%; overflow-wrap: anywhere; }
+.badge.red { background: var(--red-fill); color: var(--red); } .badge.green { background: var(--green-fill); color: var(--green); }
+.badge.orange { background: var(--orange-fill); color: var(--orange); } .badge.blue { background: var(--blue-fill); color: var(--blue); }
+.badge.purple { background: var(--purple-fill); color: var(--purple); }
+.notice { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--label-2); background: var(--surface);
+  border-radius: var(--r-md); padding: 10px 14px; margin: 0 0 16px; box-shadow: var(--shadow); }
+.notice svg { flex: none; color: var(--orange); margin-top: 2px; }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 1080px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.col { display: grid; gap: 16px; min-width: 0; }
+.card { background: var(--surface); border-radius: var(--r-lg); padding: 16px; box-shadow: var(--shadow); min-width: 0; }
+.card > h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--label-3); margin: 0 0 12px; }
+.empty { color: var(--label-3); font-size: 14px; }
+.rc-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0 0 16px; padding: 14px 16px;
+  border-radius: var(--r-lg); background: var(--surface); box-shadow: var(--shadow); border-left: 4px solid var(--red); }
+.rc-banner[hidden] { display: none; }
+.rc-banner .k { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--label-3); }
+.rc-banner .v { font-family: var(--mono); font-size: 22px; font-weight: 700; overflow-wrap: anywhere; }
+.rc-banner .why { flex: 1 1 320px; min-width: 0; color: var(--label-2); font-size: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.ask-row { display: flex; gap: 8px; margin-top: 10px; }
+.ask-row input { flex: 1; min-width: 0; min-height: 44px; font: inherit; border-radius: var(--r-sm); border: .5px solid var(--separator);
+  background: var(--surface-2); color: var(--label); padding: 0 12px; }
+.outcome { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.via { font-family: var(--mono); font-size: 12.5px; color: var(--label-2); overflow-wrap: anywhere; }
+#cy { height: 520px; border-radius: var(--r-md); background: var(--canvas); }
+@media (max-width: 700px) { #cy { height: 380px; } .bar select { flex: 1 1 100%; } .hero h1 { font-size: 24px; } }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--label-2); margin-top: 10px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.sw.line { width: 18px; height: 3px; border-radius: 2px; }
+
+/* root cause: graph vs graph removed */
+.verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 520px) { .verdict { grid-template-columns: 1fr; } }
+.tile { border-radius: var(--r-md); background: var(--surface-2); padding: 12px; min-width: 0; }
+.tile.primary { background: var(--blue-fill); }
+.tile .k { font-size: 12px; font-weight: 600; color: var(--label-3); text-transform: uppercase; letter-spacing: .04em; }
+.tile .v { font-size: 22px; font-weight: 700; margin: 2px 0; overflow-wrap: anywhere; font-family: var(--mono); letter-spacing: -.02em; }
+.tile .s { font-size: 13px; color: var(--label-2); }
+.feats { display: grid; grid-template-columns: 76px 1fr 38px; gap: 6px 10px; align-items: center; font-size: 13px; margin-top: 14px; }
+.meter { height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.meter > i { display: block; height: 100%; background: var(--blue); border-radius: 3px; }
+.num { font-family: var(--mono); font-size: 12px; color: var(--label-2); text-align: right; }
+.narr { margin: 14px 0 0; font-size: 14px; color: var(--label-2); }
+.src { font-size: 12px; color: var(--label-3); margin-top: 6px; }
+
+/* inset grouped list (HIG) */
+.list { list-style: none; margin: 0; padding: 0; border-radius: var(--r-md); background: var(--surface-2); overflow: hidden; }
+.list li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 10px 12px; font-size: 14px; }
+.list li + li { border-top: .5px solid var(--separator); }
+.ico { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; color: #fff; }
+.ico svg { width: 16px; height: 16px; }
+.ev-k { display: block; font-size: 12px; font-weight: 600; color: var(--label-3); text-transform: uppercase; letter-spacing: .03em; }
+
+/* timeline */
+.tl { width: 100%; height: auto; display: block; }
+.tl text { fill: var(--label-2); font: 12px var(--font); }
+.tl .axis { stroke: var(--separator); }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; font-weight: 600; color: var(--label-3); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+th, td { padding: 8px 6px; border-bottom: .5px solid var(--separator); vertical-align: top; }
+td.mono { font-family: var(--mono); }
+.scroll-x { overflow-x: auto; }
+.act { border-radius: var(--r-md); background: var(--surface-2); padding: 12px; }
+.act + .act { margin-top: 8px; }
+.act h3 { font-size: 15px; margin: 0 0 4px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.act p { margin: 2px 0; font-size: 13px; color: var(--label-2); overflow-wrap: anywhere; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+details > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; font-size: 13px;
+  text-transform: uppercase; letter-spacing: .04em; color: var(--label-3); list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "›"; display: inline-block; margin-right: 8px; transition: transform .15s; font-size: 18px; }
+details[open] > summary::before { transform: rotate(90deg); }
+#toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 50; max-width: min(92vw, 560px);
+  background: var(--label); color: var(--bg); padding: 12px 16px; border-radius: var(--r-md); font-size: 14px; display: none; }
+#toast.show { display: block; }
+dialog { border: none; border-radius: var(--r-lg); padding: 20px; max-width: min(92vw, 440px); background: var(--surface); color: var(--label); }
+dialog::backdrop { background: rgba(0,0,0,.4); }
+dialog h3 { margin: 0 0 8px; font-size: 17px; } dialog p { margin: 0 0 16px; color: var(--label-2); font-size: 14px; }
+.foot { color: var(--label-3); font-size: 12px; margin: 20px 4px 8px; }
+.foot a { color: var(--blue); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-graph" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7.2 7.5 10.5 16M16.8 7.5 13.5 16M7.5 6h9"/></g></symbol>
+  <symbol id="i-path" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12h12m-4-5 5 5-5 5"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M3 12h4l3-7 4 14 3-7h4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></g></symbol>
+  <symbol id="i-change" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12M6 15a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 9c0 5-12 3-12 6"/></g></symbol>
+  <symbol id="i-host" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3.5" y="4" width="17" height="7" rx="2"/><rect x="3.5" y="13" width="17" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></g></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 6.1A9.8 9.8 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-2.7 3.3M6.6 6.6C4.4 8.2 3 12 3 12s4 6 9 6a8.6 8.6 0 0 0 4-1"/></g></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5" stroke-linecap="round"/></g></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></g></symbol>
+</svg>
+
+<header class="bar">
+  <div class="brand"><svg width="22" height="22" aria-hidden="true"><use href="#i-graph"/></svg>SynapseGuard</div>
+  <span id="health" class="status" role="status"><span class="dot"></span><span>Checking FalkorDB…</span></span>
+  <label class="visually-hidden" for="scenario">Demo scenario</label>
+  <select id="scenario"></select>
+  <button id="load" class="btn" type="button"><span class="spinner" aria-hidden="true"></span>Load scenario</button>
+  <button id="go" class="btn primary" type="button" disabled><span class="spinner" aria-hidden="true"></span>Investigate</button>
+</header>
+
+<main class="wrap">
+  <section class="hero" aria-live="polite">
+    <div>
+      <h1 id="title">No incident loaded</h1>
+      <p id="story">Pick a scenario and load it into FalkorDB.</p>
+    </div>
+    <div class="badges" id="badges"></div>
+  </section>
+  <section id="rc-banner" class="rc-banner" hidden aria-live="polite"></section>
+  <p class="notice"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg>
+    <span>Demo scenarios use synthetic telemetry on the OpenTelemetry Demo topology. Approved actions are executed as a
+    simulation against the graph, not against real infrastructure.</span></p>
+
+  <div class="grid">
+    <div class="col">
+      <section class="card" aria-labelledby="h-graph">
+        <h2 id="h-graph">Service graph in FalkorDB</h2>
+        <div id="cy" role="img" aria-label="Service call graph. Root cause, causal path and breakers are also listed in the panels on the right."></div>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--green)"></i>Healthy</span>
+          <span><i class="sw" style="background:var(--red)"></i>Degraded</span>
+          <span><i class="sw" style="background:var(--gray)"></i>No telemetry</span>
+          <span><i class="sw" style="background:var(--purple);border-radius:3px"></i>Host</span>
+          <span><i class="sw" style="box-shadow:0 0 0 3px var(--label) inset"></i>Root cause</span>
+          <span><i class="sw line" style="background:var(--blue)"></i>Causal path</span>
+          <span><i class="sw line" style="background:var(--orange)"></i>Breaker (min-cut)</span>
+        </div>
+      </section>
+      <section class="card" aria-labelledby="h-tl">
+        <h2 id="h-tl">Incident timeline</h2>
+        <div id="timeline" class="empty">Run an investigation to see when each service degraded and which changes landed before.</div>
+      </section>
+      <section class="card">
+        <details id="trace-box">
+          <summary>Agent trace</summary>
+          <div id="trace" class="empty">Each tool the agent calls appears here with its duration.</div>
+        </details>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="card" aria-labelledby="h-rc">
+        <h2 id="h-rc">Root cause</h2>
+        <div id="compare" class="empty">No investigation yet.</div>
+      </section>
+      <section class="card" aria-labelledby="h-page">
+        <h2 id="h-page">Who to page</h2>
+        <div id="page" class="empty">Run an investigation.</div>
+      </section>
+      <section class="card" aria-labelledby="h-ask">
+        <h2 id="h-ask">Ask the graph</h2>
+        <div class="chips" id="chips"></div>
+        <div id="ask-out" class="empty" aria-live="polite">Each question runs one fixed, human-written tool. No query is generated.</div>
+        <form class="ask-row" id="ask-form">
+          <label class="visually-hidden" for="ask-q">Question for the local LLM</label>
+          <input id="ask-q" placeholder="Or ask in words, e.g. Postgres is down, who do I wake?" maxlength="500" autocomplete="off">
+          <button class="btn" id="ask-btn" type="submit"><span class="spinner" aria-hidden="true"></span>Ask LLM</button>
+        </form>
+        <p class="src">The local LLM (Ollama) only picks tools over MCP; its sentence is rejected if it names anything the tools did not return. Slow on CPU.</p>
+      </section>
+      <section class="card" aria-labelledby="h-ev">
+        <h2 id="h-ev">Evidence from the graph</h2>
+        <div id="evidence" class="empty">—</div>
+      </section>
+      <section class="card" aria-labelledby="h-br">
+        <h2 id="h-br">Blast radius and containment</h2>
+        <div id="blast" class="empty">—</div>
+      </section>
+      <section class="card" aria-labelledby="h-act">
+        <h2 id="h-act">Proposed actions</h2>
+        <div id="actions" class="empty">—</div>
+      </section>
+      <section class="card" aria-labelledby="h-mem">
+        <h2 id="h-mem">Memory</h2>
+        <div id="memory" class="empty">—</div>
+      </section>
+    </div>
+  </div>
+  <p class="foot">Accuracy: 0.95 top-1 on held-out synthetic scenarios (our fault model); on real RCAEval fault-injection
+    data the graph ranking is on par with a strong no-graph baseline. Details in docs/evaluation.md.</p>
+</main>
+
+<dialog id="confirm-dialog" aria-labelledby="cd-title">
+  <h3 id="cd-title">Execute action?</h3>
+  <p id="cd-body"></p>
+  <div class="row" style="justify-content:flex-end">
+    <button class="btn" value="cancel" id="cd-cancel" type="button">Cancel</button>
+    <button class="btn primary" id="cd-ok" type="button">Execute simulation</button>
+  </div>
+</dialog>
+<div id="toast" role="alert" aria-live="assertive"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const EV = {call_path: ["i-path", "--blue"], telemetry: ["i-pulse", "--red"], frontier: ["i-layers", "--purple"],
+  onset: ["i-clock", "--orange"], change: ["i-change", "--green"], host: ["i-host", "--purple"],
+  coverage: ["i-graph", "--blue"], blind_spot: ["i-eye", "--gray"]};
+let cy, incident = null, last = null, scenarios = [];
+
+// Recorded-demo mode (GitHub Pages): replay real responses captured from the live app
+// by scripts/build_static_site.py. Writes and the local LLM need the live app.
+const STATIC = location.hostname.endsWith("github.io") || new URLSearchParams(location.search).get("static") === "1";
+let staticScenario = null, staticMeta = null;
+const toolKey = (tool, args) => (tool + "__" + Object.keys(args).sort().map(k => `${k}-${args[k]}`).join("_"))
+  .replace(/[^A-Za-z0-9_.-]/g, "_");
+async function staticGet(file) {
+  const r = await fetch(`data/${file}`);
+  if (!r.ok) throw new Error("This answer was not recorded. Run SynapseGuard locally for the live agent.");
+  return r.json();
+}
+async function staticApi(path, opts) {
+  const [p, query] = path.split("?");
+  const scn = staticScenario || scenarios[0]?.name || "payment-flag";
+  let m;
+  if (p === "/health") return {status: "recorded"};
+  if (p === "/api/scenarios") return staticGet("scenarios.json");
+  if ((m = p.match(/^\/api\/scenarios\/([^/]+)\/load$/))) { staticScenario = decodeURIComponent(m[1]); return staticGet(`${staticScenario}/load.json`); }
+  if (p === "/api/graph") return staticGet(`${scn}/graph.json`);
+  if (p === "/api/incidents") return staticGet(`${scn}/incidents.json`);
+  if (/\/investigate$/.test(p)) return staticGet(`${scn}/${(query || "").includes("mode=flat") ? "flat" : "investigate"}.json`);
+  if ((m = p.match(/^\/api\/tools\/([a-z_]+)$/))) return staticGet(`${scn}/tools/${toolKey(m[1], JSON.parse(opts.body || "{}"))}.json`);
+  if (p === "/api/ask") throw new Error("Ask LLM runs a local model: run SynapseGuard locally (README → Quick start). This page is a recorded demo.");
+  throw new Error("Recorded demo: approving, executing and confirming need the live app. Run it locally (README → Quick start).");
+}
+
+async function api(path, opts = {}) {
+  if (STATIC) return staticApi(path, opts);
+  const r = await fetch(path, {headers: {"Content-Type": "application/json"}, ...opts});
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.detail || r.statusText);
+  return body;
+}
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 6000); }
+function busy(btn, on) { btn.setAttribute("aria-busy", on ? "true" : "false"); }
+function lock(on) { $("load").disabled = on; $("go").disabled = on || !incident; }
+
+async function health() {
+  const el = $("health");
+  if (STATIC) { el.className = "status ok"; el.lastElementChild.textContent = "Recorded demo" + (staticMeta ? ` · ${staticMeta.captured_on}` : ""); return; }
+  try { await api("/health"); el.className = "status ok"; el.lastElementChild.textContent = "FalkorDB connected"; }
+  catch { el.className = "status bad"; el.lastElementChild.textContent = "FalkorDB unavailable"; }
+}
+
+function graphStyle() {
+  return [
+    {selector: "node", style: {"label": "data(id)", "color": css("--label-2"), "font-size": 10, "font-family": css("--font"),
+      "text-valign": "bottom", "text-margin-y": 4, "background-color": css("--green"), "width": 20, "height": 20,
+      "border-width": 0}},
+    {selector: "node[?degraded]", style: {"background-color": css("--red")}},
+    {selector: "node[?unknown]", style: {"background-color": css("--gray"), "border-width": 2, "border-style": "dashed", "border-color": css("--label-3")}},
+    {selector: "node[kind = 'host']", style: {"shape": "round-rectangle", "background-color": css("--purple"), "width": 30, "height": 14, "opacity": .85}},
+    {selector: "node[?hot]", style: {"background-color": css("--orange")}},
+    {selector: "node.root", style: {"border-width": 4, "border-color": css("--label"), "width": 30, "height": 30, "font-weight": 700, "color": css("--label")}},
+    {selector: "node.symptom", style: {"shape": "diamond", "width": 26, "height": 26}},
+    {selector: "edge", style: {"width": 1, "line-color": css("--edge"), "target-arrow-color": css("--edge"), "target-arrow-shape": "triangle",
+      "curve-style": "bezier", "arrow-scale": .7}},
+    {selector: "edge[type = 'RUNS_ON']", style: {"line-style": "dotted", "target-arrow-shape": "none", "opacity": .35}},
+    {selector: "edge[?async]", style: {"line-style": "dashed"}},
+    {selector: "edge.path", style: {"width": 4, "line-color": css("--blue"), "target-arrow-color": css("--blue"), "z-index": 9}},
+    {selector: "edge.cut", style: {"width": 4, "line-color": css("--orange"), "target-arrow-color": css("--orange"), "line-style": "dashed", "z-index": 8}},
+    {selector: ".faded", style: {"opacity": .22}},
+  ];
+}
+
+async function init() {
+  if (STATIC) {
+    staticMeta = await staticGet("meta.json").catch(() => null);
+    const n = document.createElement("p");
+    n.className = "notice";
+    n.innerHTML = `<svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><span><b>Recorded demo.</b> Every result on this page was captured from the running app${staticMeta ? ` on ${esc(staticMeta.captured_on)} (commit ${esc(staticMeta.commit)})` : ""}. Approve, execute and Ask LLM need the live agent: run it locally in one command (see the README).</span>`;
+    document.querySelector(".notice").before(n);
+  }
+  health(); setInterval(health, 15000);
+  scenarios = await api("/api/scenarios");
+  $("scenario").innerHTML = scenarios.map(s => `<option value="${esc(s.name)}">${esc(s.title)}</option>`).join("");
+  $("scenario").onchange = () => { if (!incident) $("story").textContent = scenarios.find(s => s.name === $("scenario").value)?.story || ""; };
+  $("scenario").onchange();
+  cy = cytoscape({container: $("cy"), wheelSensitivity: 0.2, style: graphStyle()});
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => cy.style(graphStyle()));
+  await refreshGraph();
+  const open = (await api("/api/incidents")).find(i => i.status === "OPEN");
+  if (open) setIncident(open.id, open.title, open.scenario);
+  lock(false);
+}
+
+function setIncident(id, title, scenarioName) {
+  incident = id;
+  const sc = scenarios.find(s => s.name === scenarioName);
+  $("title").textContent = title || id;
+  $("story").textContent = sc ? sc.story : "";
+  $("badges").innerHTML = `<span class="badge red">SEV2</span><span class="badge">${esc(id)}</span>` +
+    (sc ? `<span class="badge blue">${esc(sc.title)}</span>` : "");
+}
+
+async function refreshGraph() {
+  const g = await api("/api/graph");
+  cy.elements().remove();
+  cy.add(g.nodes.map(n => ({data: {id: n.id, kind: n.label === "Host" ? "host" : n.kind, degraded: !!n.degraded,
+    unknown: n.label === "Service" && n.anomaly === null, hot: n.label === "Host" && n.cpu >= 90}})));
+  cy.add(g.edges.map((e, i) => ({data: {id: "e" + i, source: e.src, target: e.dst, type: e.type, async: e.type === "CALLS" && e.sync === false}})));
+  cy.layout({name: "breadthfirst", directed: true, spacingFactor: 1.05, roots: cy.nodes("[kind = 'proxy']"), padding: 12,
+    animate: !matchMedia("(prefers-reduced-motion: reduce)").matches}).run();
+  return g;
+}
+
+$("load").onclick = async () => {
+  busy($("load"), true); lock(true);
+  try {
+    const name = $("scenario").value;
+    const r = await api(`/api/scenarios/${encodeURIComponent(name)}/load`, {method: "POST"});
+    last = null; await refreshGraph();
+    const inc = (await api("/api/incidents")).find(i => i.id === r.incident);
+    setIncident(r.incident, inc?.title, name);
+    for (const id of ["compare", "evidence", "blast", "actions", "memory", "timeline", "trace"])
+      $(id).innerHTML = '<span class="empty">Loaded. Press Investigate.</span>';
+  } catch (e) { toast(e.message); } finally { busy($("load"), false); lock(false); }
+};
+
+$("go").onclick = async () => {
+  busy($("go"), true); lock(true);
+  try {
+    const [g, f, graph] = await Promise.all([
+      api(`/api/incidents/${encodeURIComponent(incident)}/investigate`, {method: "POST"}),
+      api(`/api/incidents/${encodeURIComponent(incident)}/investigate?mode=flat`, {method: "POST"}),
+      api("/api/graph")]);
+    last = g; render(g, f, graph);
+  } catch (e) { toast(e.message); } finally { busy($("go"), false); lock(false); }
+};
+
+function render(g, f, graph) {
+  const top = g.root_cause;
+  cy.elements().removeClass("root symptom path cut faded");
+  cy.$id(g.incident.service).addClass("symptom");
+  if (top) {
+    cy.$id(top.id).addClass("root");
+    for (let i = 0; i + 1 < top.path.length; i++) cy.edges(`[source = "${top.path[i]}"][target = "${top.path[i + 1]}"]`).addClass("path");
+  }
+  for (const e of (g.breakers?.cut || [])) cy.edges(`[source = "${e.src}"][target = "${e.dst}"]`).addClass("cut");
+  const inA = new Set(g.subgraph.nodes.map(n => n.id)); if (top?.label === "Host") inA.add(top.id);
+  cy.nodes().forEach(n => { if (!inA.has(n.id()) && n.data("kind") !== "host") n.addClass("faded"); });
+
+  const flatTop = f.root_cause?.id, agree = flatTop === top?.id;
+  $("compare").innerHTML = `<div class="verdict">
+    <div class="tile primary"><div class="k">With the graph</div><div class="v">${esc(top ? top.id : "Abstain")}</div>
+      <div class="s">${top ? `${Math.round(top.confidence * 100)}% relative confidence · ${esc(g.scoring_profile)} profile · ${Math.round(g.elapsed_ms)} ms` : esc(g.abstain_reason)}</div></div>
+    <div class="tile"><div class="k">Graph removed</div><div class="v">${esc(flatTop || "—")}</div>
+      <div class="s"><span class="badge ${agree ? "green" : "orange"}">${agree ? "Agrees" : "Disagrees"}</span>
+      No path, blast radius or breaker plan without relationships.</div></div></div>
+    ${top ? `<div class="feats" role="list" aria-label="Evidence features">${Object.entries(top.features).map(([k, v]) =>
+      `<span role="listitem">${esc(k)}</span><span class="meter" aria-hidden="true"><i style="width:${Math.round(v * 100)}%"></i></span><span class="num">${v.toFixed(2)}</span>`).join("")}</div>
+      <p class="src">Runners-up: ${g.candidates.slice(1, 4).map(c => `${esc(c.id)} ${Math.round(c.confidence * 100)}%`).join(", ") || "none"}</p>` : ""}
+    <p class="narr">${esc(g.narrative.text)}</p><p class="src">Narrative: ${esc(g.narrative.source)}</p>`;
+
+  $("evidence").innerHTML = top ? `<ul class="list">${top.evidence.map(e => { const [ic, col] = EV[e.kind] || ["i-graph", "--gray"];
+    return `<li><span class="ico" style="background:var(${col})"><svg aria-hidden="true"><use href="#${ic}"/></svg></span>
+      <span><span class="ev-k">${esc(e.kind.replace("_", " "))}</span>${esc(e.statement)}</span></li>`; }).join("")}</ul>` : '<span class="empty">No evidence.</span>';
+
+  const b = g.blast_radius, br = g.breakers;
+  $("blast").innerHTML = b ? `<div class="badges" style="margin-bottom:10px">
+      <span class="badge red">${b.impacted.length} upstream</span><span class="badge orange">${b.sync_count} synchronous</span>
+      <span class="badge">${b.async_only_count} async only</span><span class="badge">max ${b.max_hops} hops</span></div>
+    <p style="margin:0 0 10px;font-size:14px">Entrypoints exposed: <b>${esc(b.entrypoints.join(", ") || "none")}</b>.
+      High criticality: ${esc(b.high_criticality.join(", ") || "none")}.</p>
+    ${br ? (br.status === "ok" ? `<p style="margin:0 0 8px;font-size:14px">Minimum cut via FalkorDB <code>algo.maxFlow</code>:
+      ${br.cut.length} breaker${br.cut.length === 1 ? "" : "s"}, cost ${br.cut_cost}, sheds ${br.shed_rps} rps.
+      Breaking every direct caller instead: ${br.naive.feasible ? "cost " + br.naive.cost : "not possible (those callers have no breaker)"}.</p>
+      <div class="scroll-x"><table><thead><tr><th scope="col">Caller → callee</th><th scope="col">rps</th><th scope="col">Cost</th></tr></thead><tbody>
+      ${br.cut.map(e => `<tr><td class="mono">${esc(e.src)} → ${esc(e.dst)}</td><td>${e.rps}</td><td>${e.cost}</td></tr>`).join("")}</tbody></table></div>`
+      : `<p class="empty">Breakers: ${esc(br.status.replaceAll("_", " "))}</p>`) : ""}` : '<span class="empty">—</span>';
+
+  renderActions(g.actions);
+  renderBanner(g);
+  renderPage(g.who_to_page);
+  renderChips(g);
+  renderTimeline(g, graph);
+  $("trace").innerHTML = `<div class="scroll-x"><table><thead><tr><th scope="col">#</th><th scope="col">Tool</th><th scope="col">Result</th><th scope="col">ms</th></tr></thead><tbody>${g.trace.map((s, i) =>
+    `<tr><td>${i + 1}</td><td><b class="mono">${esc(s.tool)}</b><div class="src">${esc(s.purpose)}</div></td><td>${esc(s.result ?? s.error ?? "")}</td><td class="mono">${s.ms}</td></tr>`).join("")}</tbody></table></div>`;
+  $("trace-box").open = true;
+
+  $("memory").innerHTML = `${g.similar_incidents.length ? `<ul class="list">${g.similar_incidents.map(s =>
+    `<li><span class="ico" style="background:var(--purple)"><svg aria-hidden="true"><use href="#i-clock"/></svg></span><span>
+      <span class="ev-k">${esc(s.incident)} · ${Math.round(s.jaccard * 100)}% overlap</span>
+      Confirmed root: <b>${esc(s.confirmed_root || "not confirmed")}</b>${s.resolved_by.length ? ". Fixed by " + esc(s.resolved_by.join("; ")) : ""}</span></li>`).join("")}</ul>`
+    : '<p class="empty" style="margin:0 0 10px">No similar past incidents yet.</p>'}
+    ${top ? `<div class="row"><button class="btn small" id="confirm" type="button">Confirm ${esc(top.id)} as root cause</button></div>
+      <p class="src">Only human confirmations become memory.</p>` : ""}`;
+  if (top) $("confirm").onclick = async () => {
+    try { const done = g.actions.filter(a => a.status === "EXECUTED_SIMULATED").map(a => a.id);
+      await api(`/api/incidents/${encodeURIComponent(incident)}/feedback`, {method: "POST", body: JSON.stringify({root_id: top.id, root_label: top.label, resolved_action_ids: done})});
+      $("confirm").textContent = "Confirmed"; $("confirm").disabled = true; toast(`Recorded ${top.id} as the confirmed root cause.`); } catch (e) { toast(e.message); } };
+}
+
+function renderTimeline(g, graph) {
+  const nodes = g.subgraph.nodes.filter(n => n.onset !== null).sort((a, b) => a.onset - b.onset);
+  const changes = (graph.changes || []).filter(c => inWindow(c, nodes));
+  if (!nodes.length) { $("timeline").innerHTML = '<span class="empty">No onset data.</span>'; return; }
+  const t0 = Math.min(nodes[0].onset, ...changes.map(c => c.at)), t1 = Math.max(nodes[nodes.length - 1].onset, ...changes.map(c => c.at));
+  const span = Math.max(60, t1 - t0), L = 150, W = 640, R = 20, row = 24, top = g.root_cause?.id;
+  const x = t => L + (t - t0) / span * (W - L - R);
+  const rows = [...changes.map(c => ({label: c.id, sub: c.summary, t: c.at, kind: "change"})), ...nodes.map(n => ({label: n.id, t: n.onset, kind: "svc"}))];
+  const H = rows.length * row + 34;
+  const fmt = s => s >= 60 ? `${Math.floor(s / 60)}m${String(Math.round(s % 60)).padStart(2, "0")}s` : `${Math.round(s)}s`;
+  $("timeline").innerHTML = `<svg class="tl" viewBox="0 0 ${W} ${H}" role="img" aria-label="Timeline of changes and service degradation onsets">
+    <line class="axis" x1="${L}" x2="${W - R}" y1="${H - 22}" y2="${H - 22}"/>
+    <text x="${L}" y="${H - 6}">T+0</text><text x="${W - R}" y="${H - 6}" text-anchor="end">T+${fmt(span)}</text>
+    ${rows.map((r, i) => { const y = i * row + 14, isRoot = r.label === top;
+      const c = r.kind === "change" ? css("--green") : (isRoot ? css("--label") : css("--red"));
+      return `<text x="${L - 10}" y="${y + 4}" text-anchor="end" ${isRoot ? 'style="font-weight:700;fill:' + css("--label") + '"' : ""}>${esc(r.label)}</text>
+        <line class="axis" x1="${L}" x2="${W - R}" y1="${y}" y2="${y}" stroke-dasharray="2 4"/>
+        ${r.kind === "change" ? `<rect x="${x(r.t) - 5}" y="${y - 5}" width="10" height="10" rx="2" fill="${c}"><title>${esc(r.sub)}</title></rect>`
+          : `<circle cx="${x(r.t)}" cy="${y}" r="${isRoot ? 7 : 5}" fill="${c}"><title>${esc(r.label)} degraded at T+${fmt(r.t - t0)}</title></circle>`}`; }).join("")}
+  </svg><p class="src">Green squares: changes in the 30 minutes before the first degradation. Circles: anomaly onset per service on the propagation path.</p>`;
+}
+const OUT = {answered_with_path: ["green", "Answered with path"], answered_from_memory: ["purple", "From memory"],
+  not_in_graph: ["orange", "Not in the graph"], unknown_entity: ["red", "Unknown name"]};
+
+function renderBanner(g) {
+  const b = $("rc-banner"), top = g.root_cause;
+  b.hidden = false;
+  if (!top) { b.innerHTML = `<span class="k">Root cause</span><span class="v">Abstain</span><span class="why">${esc(g.abstain_reason)}</span>`; return; }
+  const ev = top.evidence.find(e => e.kind === "change") || top.evidence.find(e => e.kind === "host") || top.evidence.find(e => e.kind === "telemetry") || {};
+  const pager = g.who_to_page?.people?.[0];
+  b.innerHTML = `<span class="k">Root cause</span><span class="v">${esc(top.id)}</span>
+    <span class="badge red">${Math.round(top.confidence * 100)}% relative confidence</span>
+    ${top.confidence < 0.9 ? `<span class="badge orange">verify: also check ${esc(g.candidates[1]?.id || "the runner-up")}</span>` : ""}
+    <span class="why">${esc(ev.statement || "")}
+      ${top.path.length > 1 ? `<br><span class="via">${esc(top.path.join(" → "))}</span>` : ""}
+      ${pager ? `<br>Page <b>${esc(pager.name)}</b> (${esc(pager.role)}).` : ""}</span>`;
+}
+
+function renderPage(p) {
+  if (!p || !p.people?.length) { $("page").innerHTML = `<span class="empty">${esc(p?.answer || "No owner recorded.")}</span>`; return; }
+  $("page").innerHTML = `<ul class="list">${p.people.map(x => `<li><span class="ico" style="background:var(${x.priority === 1 ? "--red" : x.priority === 2 ? "--green" : "--blue"})"><svg aria-hidden="true"><use href="#${x.priority === 2 ? "i-change" : "i-pulse"}"/></svg></span>
+    <span><span class="ev-k">${esc(x.role)}</span><b>${esc(x.name)}</b>: ${esc(x.reason)}<br><span class="via">${esc(x.path.join(" → "))}</span></span></li>`).join("")}</ul>`;
+}
+
+function renderChips(g) {
+  const root = g.root_cause?.id || g.incident.service, sym = g.incident.service;
+  const qs = [
+    ["What breaks? depth 1", "blast_radius", {service: root, depth: 1}],
+    ["What breaks? depth 4", "blast_radius", {service: root, depth: 4}],
+    ["Recent changes", "recent_changes", {service: sym, hours: 2, depth: 3}],
+    [`Why is ${sym} connected?`, "path_between", {source: sym, target: root}],
+    ["Load-bearing services", "load_bearing", {limit: 5}],
+    ["Memory", "recall", {service: root}],
+    ["Unknown: payments-gateway", "blast_radius", {service: "payments-gateway"}],
+  ];
+  $("chips").innerHTML = qs.map((q, i) => `<button class="btn small" type="button" data-i="${i}">${esc(q[0])}</button>`).join("");
+  $("chips").querySelectorAll("button").forEach(btn => btn.onclick = async () => {
+    const [, tool, args] = qs[+btn.dataset.i];
+    try { renderTool(await api(`/api/tools/${tool}`, {method: "POST", body: JSON.stringify(args)})); } catch (e) { toast(e.message); }
+  });
+}
+
+function renderTool(r) {
+  const [col, label] = OUT[r.outcome] || ["", r.outcome];
+  const items = r.paths ? r.paths.map(p => `<li class="via">${esc(p.via.join(" → "))} <span class="src">(${p.hops} hop${p.hops > 1 ? "s" : ""}${p.sync ? "" : ", async"})</span></li>`)
+    : r.people ? r.people.map(p => `<li class="via">${esc(p.name)}: ${esc(p.path.join(" → "))}</li>`)
+    : r.changes ? r.changes.map(c => `<li class="via">${esc(c.change)} ${esc(c.summary)} by ${esc(c.author)}, ${c.minutes_ago} min ago: ${esc(c.via.join(" → "))}</li>`)
+    : r.path?.length ? [`<li class="via">${esc(r.path.join(" → "))}</li>`]
+    : r.services ? r.services.map(x => `<li class="via">${esc(x.service)} (PageRank ${x.pagerank}) ← ${esc(x.called_by.join(", ") || "none")}</li>`) : [];
+  $("ask-out").innerHTML = `<p style="margin:0 0 6px"><span class="badge ${col}"><span class="outcome">${esc(label)}</span></span>
+    <span class="src">${esc(r.tool)}(${esc(JSON.stringify(r.args))}) · ${r.ms} ms</span></p>
+    <p style="margin:0 0 6px">${esc(r.answer)}</p>${items.length ? `<ul style="margin:0;padding-left:18px">${items.slice(0, 12).join("")}</ul>` : ""}`;
+}
+
+$("ask-form").onsubmit = async ev => {
+  ev.preventDefault();
+  const q = $("ask-q").value.trim(); if (!q) return;
+  busy($("ask-btn"), true); $("ask-btn").disabled = true;
+  $("ask-out").innerHTML = '<span class="empty" role="status">The local model is choosing tools… (CPU, can take 30–90 s)</span>';
+  try {
+    const r = await api("/api/ask", {method: "POST", body: JSON.stringify({question: q})});
+    $("ask-out").innerHTML = `<p style="margin:0 0 6px">${esc(r.answer)}</p>
+      <p class="src">Source: ${esc(r.source)}${r.violations?.length ? " · rejected names: " + esc(r.violations.join(", ")) : ""}</p>
+      <ul style="margin:0;padding-left:18px">${r.steps.map(s => `<li class="via">${esc(s.tool)}(${esc(JSON.stringify(s.args))}) → ${esc(s.outcome)} · ${s.ms} ms</li>`).join("")}</ul>`;
+  } catch (e) { toast(e.message); } finally { busy($("ask-btn"), false); $("ask-btn").disabled = false; }
+};
+
+function inWindow(c, nodes) { return nodes.length && c.at >= nodes[0].onset - 1800 && c.at <= nodes[nodes.length - 1].onset; }
+
+function renderActions(acts) {
+  const label = {PROPOSED: "orange", APPROVED: "blue", REJECTED: "", EXECUTED_SIMULATED: "green", ADVISORY: "purple"};
+  $("actions").innerHTML = acts.length ? acts.map(a => `<div class="act" data-id="${esc(a.id)}">
+    <h3>${esc(a.summary)}</h3>
+    <div class="badges"><span class="badge ${label[a.status] || ""}">${esc(a.status.replace("_", " ").toLowerCase())}</span>
+      <span class="badge ${a.risk === "high" ? "red" : a.risk === "medium" ? "orange" : a.risk === "low" ? "green" : ""}">${esc(a.risk)} risk</span></div>
+    <p>${esc(a.rationale)}</p>
+    ${a.expected_recovery?.length ? `<p>Expected to recover: ${esc(a.expected_recovery.join(", "))}</p>` : ""}
+    ${a.requires_approval ? `<div class="row">${a.status === "PROPOSED" ? `<button class="btn small primary" data-do="approve" type="button">Approve</button><button class="btn small danger" data-do="reject" type="button">Reject</button>` : ""}
+      ${a.status === "APPROVED" ? `<button class="btn small primary" data-do="execute" type="button">Execute (simulated)…</button>` : ""}</div>` : ""}</div>`).join("") : '<span class="empty">No actions.</span>';
+  $("actions").querySelectorAll("button[data-do]").forEach(btn => btn.onclick = async () => {
+    const id = btn.closest(".act").dataset.id, what = btn.dataset.do, a = last.actions.find(x => x.id === id);
+    if (what === "execute" && !(await confirmDialog(`“${a.summary}” will be simulated against the graph: the affected services' telemetry is reset and the graph is updated.`))) return;
+    btn.disabled = true;
+    try {
+      const res = await api(`/api/actions/${encodeURIComponent(id)}/${what}`, {method: "POST", body: what === "execute" ? undefined : JSON.stringify({by: "operator"})});
+      a.status = res.status; renderActions(last.actions);
+      if (what === "execute") { await refreshGraph(); toast("Simulated. Investigate again to see what is still degraded."); }
+    } catch (e) { toast(e.message); btn.disabled = false; }
+  });
+}
+
+function confirmDialog(text) {
+  return new Promise(resolve => {
+    const d = $("confirm-dialog"); $("cd-body").textContent = text;
+    const done = v => { d.close(); resolve(v); };
+    $("cd-ok").onclick = () => done(true); $("cd-cancel").onclick = () => done(false);
+    d.oncancel = () => resolve(false); d.showModal(); $("cd-cancel").focus();
+  });
+}
+
+init().then(async () => {
+  // ?scenario=<name>&auto=1 loads and investigates on open (demo recording and screenshots)
+  const q = new URLSearchParams(location.search);
+  if (q.get("theme")) document.documentElement.dataset.theme = q.get("theme");
+  if (q.get("theme")) cy.style(graphStyle());
+  if (q.get("scenario")) { $("scenario").value = q.get("scenario"); }
+  if (q.get("auto") === "1") { await $("load").onclick(); await $("go").onclick(); }
+  else if (q.get("go") === "1" && incident) { await $("go").onclick(); }  // investigate the open incident as it is now
+  if (q.get("chip")) $("chips").querySelectorAll("button")[+q.get("chip")]?.click();
+}).catch(e => toast(e.message));
+</script>
+</body>
+</html>

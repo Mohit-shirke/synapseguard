@@ -1,0 +1,19 @@
+{
+ "outcome": "answered_from_memory",
+ "tool": "recall",
+ "args": {
+  "service": "product-catalog"
+ },
+ "resolved": {
+  "status": "found",
+  "id": "product-catalog",
+  "label": "Service",
+  "name": "Product Catalog",
+  "query": "product-catalog",
+  "exact": true
+ },
+ "memories": [],
+ "incidents_affected": 2,
+ "answer": "product-catalog was the confirmed root cause of 0 past incident(s) and affected in 2.",
+ "ms": 3.57
+}

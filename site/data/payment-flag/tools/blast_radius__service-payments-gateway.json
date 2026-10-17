@@ -1,0 +1,17 @@
+{
+ "outcome": "unknown_entity",
+ "tool": "blast_radius",
+ "args": {
+  "service": "payments-gateway",
+  "depth": 3
+ },
+ "answer": "'payments-gateway' is not in the graph; did you mean payment?",
+ "resolved": {
+  "status": "unknown",
+  "query": "payments-gateway",
+  "suggestions": [
+   "payment"
+  ]
+ },
+ "ms": 8.67
+}

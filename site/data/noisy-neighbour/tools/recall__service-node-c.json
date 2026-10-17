@@ -1,0 +1,18 @@
+{
+ "outcome": "not_in_graph",
+ "tool": "recall",
+ "args": {
+  "service": "node-c"
+ },
+ "resolved": {
+  "status": "found",
+  "id": "node-c",
+  "label": "Host",
+  "name": "k8s-node-c",
+  "query": "node-c",
+  "exact": true
+ },
+ "memories": [],
+ "answer": "No past investigation involved node-c.",
+ "ms": 3.38
+}

@@ -1,0 +1,89 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "recent_changes",
+ "args": {
+  "service": "frontend-proxy",
+  "hours": 2,
+  "depth": 3
+ },
+ "resolved": {
+  "status": "found",
+  "id": "frontend-proxy",
+  "label": "Service",
+  "name": "Frontend Proxy (Envoy)",
+  "query": "frontend-proxy",
+  "exact": true
+ },
+ "changes": [
+  {
+   "change": "chg-5002-03",
+   "kind": "config",
+   "summary": "Routine config on shipping",
+   "minutes_ago": 3,
+   "author": "Bob Tanaka",
+   "target": "shipping",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "shipping"
+   ]
+  },
+  {
+   "change": "chg-5002-02",
+   "kind": "config",
+   "summary": "Routine config on cache",
+   "minutes_ago": 5,
+   "author": "ci-bot",
+   "target": "cache",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "cart",
+    "cache"
+   ]
+  },
+  {
+   "change": "chg-5002-01",
+   "kind": "deploy",
+   "summary": "Deploy product-catalog v3.29.7",
+   "minutes_ago": 7,
+   "author": "sre-oncall",
+   "target": "product-catalog",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "product-catalog"
+   ]
+  },
+  {
+   "change": "chg-5002-06",
+   "kind": "deploy",
+   "summary": "Routine deploy on cache",
+   "minutes_ago": 11,
+   "author": "sre-oncall",
+   "target": "cache",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "cart",
+    "cache"
+   ]
+  },
+  {
+   "change": "chg-5002-04",
+   "kind": "feature_flag",
+   "summary": "Routine feature_flag on payment",
+   "minutes_ago": 40,
+   "author": "sre-oncall",
+   "target": "payment",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "checkout",
+    "payment"
+   ]
+  }
+ ],
+ "answer": "5 changes: chg-5002-03 on shipping (Routine config on shipping, 3 min ago); chg-5002-02 on cache (Routine config on cache, 5 min ago); chg-5002-01 on product-catalog (Deploy product-catalog v3.29.7, 7 min ago); chg-5002-06 on cache (Routine deploy on cache, 11 min ago)",
+ "ms": 7.62
+}

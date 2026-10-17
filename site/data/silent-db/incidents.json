@@ -1,0 +1,20 @@
+[
+ {
+  "id": "inc-5010",
+  "title": "Elevated errors/latency on Frontend Proxy (Envoy)",
+  "status": "ARCHIVED",
+  "scenario": "payment-flag",
+  "opened_at": 1842100288,
+  "confirmed_root": null,
+  "investigations": 1
+ },
+ {
+  "id": "inc-5000",
+  "title": "Elevated errors/latency on Frontend Proxy (Envoy)",
+  "status": "OPEN",
+  "scenario": "silent-db",
+  "opened_at": 1842000253,
+  "confirmed_root": null,
+  "investigations": 0
+ }
+]

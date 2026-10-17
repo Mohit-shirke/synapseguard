@@ -1,0 +1,15 @@
+{
+ "outcome": "unknown_entity",
+ "tool": "path_between",
+ "args": {
+  "source": "frontend-proxy",
+  "target": "node-c"
+ },
+ "answer": "'node-c' is not in the graph",
+ "resolved": {
+  "status": "unknown",
+  "query": "node-c",
+  "suggestions": []
+ },
+ "ms": 7.13
+}

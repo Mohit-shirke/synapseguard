@@ -1,0 +1,94 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "blast_radius",
+ "args": {
+  "service": "quote",
+  "depth": 4
+ },
+ "resolved": {
+  "status": "found",
+  "id": "quote",
+  "label": "Service",
+  "name": "Quote",
+  "query": "quote",
+  "exact": true
+ },
+ "paths": [
+  {
+   "service": "shipping",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "shipping",
+    "quote"
+   ]
+  },
+  {
+   "service": "checkout",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "checkout",
+    "shipping",
+    "quote"
+   ]
+  },
+  {
+   "service": "frontend",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "frontend",
+    "shipping",
+    "quote"
+   ]
+  },
+  {
+   "service": "agent",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "agent",
+    "frontend",
+    "shipping",
+    "quote"
+   ]
+  },
+  {
+   "service": "frontend-proxy",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "shipping",
+    "quote"
+   ]
+  },
+  {
+   "service": "mcp",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "mcp",
+    "frontend",
+    "shipping",
+    "quote"
+   ]
+  },
+  {
+   "service": "chatbot",
+   "hops": 4,
+   "sync": true,
+   "via": [
+    "chatbot",
+    "agent",
+    "frontend",
+    "shipping",
+    "quote"
+   ]
+  }
+ ],
+ "answer": "7 services depend on quote within 4 hops: shipping, checkout, frontend, agent, frontend-proxy, mcp, chatbot",
+ "ms": 4.83
+}

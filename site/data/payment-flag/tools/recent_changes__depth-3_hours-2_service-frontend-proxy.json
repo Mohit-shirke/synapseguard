@@ -1,0 +1,127 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "recent_changes",
+ "args": {
+  "service": "frontend-proxy",
+  "hours": 2,
+  "depth": 3
+ },
+ "resolved": {
+  "status": "found",
+  "id": "frontend-proxy",
+  "label": "Service",
+  "name": "Frontend Proxy (Envoy)",
+  "query": "frontend-proxy",
+  "exact": true
+ },
+ "changes": [
+  {
+   "change": "chg-5010-07",
+   "kind": "feature_flag",
+   "summary": "Routine feature_flag on checkout",
+   "minutes_ago": 1,
+   "author": "ci-bot",
+   "target": "checkout",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "checkout"
+   ]
+  },
+  {
+   "change": "chg-5010-04",
+   "kind": "feature_flag",
+   "summary": "Routine feature_flag on mcp",
+   "minutes_ago": 4,
+   "author": "Bob Tanaka",
+   "target": "mcp",
+   "via": [
+    "frontend-proxy",
+    "chatbot",
+    "agent",
+    "mcp"
+   ]
+  },
+  {
+   "change": "chg-5010-08",
+   "kind": "deploy",
+   "summary": "Deploy frontend (red herring)",
+   "minutes_ago": 6,
+   "author": "ci-bot",
+   "target": "frontend",
+   "via": [
+    "frontend-proxy",
+    "frontend"
+   ]
+  },
+  {
+   "change": "chg-5010-01",
+   "kind": "feature_flag",
+   "summary": "Enable flag paymentFailure",
+   "minutes_ago": 6,
+   "author": "Alice Moreau",
+   "target": "payment",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "checkout",
+    "payment"
+   ]
+  },
+  {
+   "change": "chg-5010-06",
+   "kind": "feature_flag",
+   "summary": "Routine feature_flag on recommendation",
+   "minutes_ago": 10,
+   "author": "platform-team",
+   "target": "recommendation",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "recommendation"
+   ]
+  },
+  {
+   "change": "chg-5010-02",
+   "kind": "config",
+   "summary": "Routine config on cart",
+   "minutes_ago": 11,
+   "author": "Alice Moreau",
+   "target": "cart",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "cart"
+   ]
+  },
+  {
+   "change": "chg-5010-03",
+   "kind": "config",
+   "summary": "Routine config on queue",
+   "minutes_ago": 14,
+   "author": "sre-oncall",
+   "target": "queue",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "checkout",
+    "queue"
+   ]
+  },
+  {
+   "change": "chg-5010-05",
+   "kind": "deploy",
+   "summary": "Routine deploy on agent",
+   "minutes_ago": 100,
+   "author": "platform-team",
+   "target": "agent",
+   "via": [
+    "frontend-proxy",
+    "chatbot",
+    "agent"
+   ]
+  }
+ ],
+ "answer": "8 changes: chg-5010-07 on checkout (Routine feature_flag on checkout, 1 min ago); chg-5010-04 on mcp (Routine feature_flag on mcp, 4 min ago); chg-5010-08 on frontend (Deploy frontend (red herring), 6 min ago); chg-5010-01 on payment (Enable flag paymentFailure, 6 min ago)",
+ "ms": 7.38
+}

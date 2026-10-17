@@ -1,0 +1,49 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "recent_changes",
+ "args": {
+  "service": "frontend-proxy",
+  "hours": 2,
+  "depth": 3
+ },
+ "resolved": {
+  "status": "found",
+  "id": "frontend-proxy",
+  "label": "Service",
+  "name": "Frontend Proxy (Envoy)",
+  "query": "frontend-proxy",
+  "exact": true
+ },
+ "changes": [
+  {
+   "change": "chg-5000-03",
+   "kind": "deploy",
+   "summary": "Routine deploy on cache",
+   "minutes_ago": 2,
+   "author": "Alice Moreau",
+   "target": "cache",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "cart",
+    "cache"
+   ]
+  },
+  {
+   "change": "chg-5000-02",
+   "kind": "feature_flag",
+   "summary": "Routine feature_flag on email",
+   "minutes_ago": 80,
+   "author": "platform-team",
+   "target": "email",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "checkout",
+    "email"
+   ]
+  }
+ ],
+ "answer": "2 changes: chg-5000-03 on cache (Routine deploy on cache, 2 min ago); chg-5000-02 on email (Routine feature_flag on email, 80 min ago)",
+ "ms": 7.45
+}

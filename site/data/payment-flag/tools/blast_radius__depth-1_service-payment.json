@@ -1,0 +1,29 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "blast_radius",
+ "args": {
+  "service": "payment",
+  "depth": 1
+ },
+ "resolved": {
+  "status": "found",
+  "id": "payment",
+  "label": "Service",
+  "name": "Payment",
+  "query": "payment",
+  "exact": true
+ },
+ "paths": [
+  {
+   "service": "checkout",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "checkout",
+    "payment"
+   ]
+  }
+ ],
+ "answer": "1 services depend on payment within 1 hops: checkout",
+ "ms": 2.72
+}

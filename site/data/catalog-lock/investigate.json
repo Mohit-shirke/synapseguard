@@ -1,0 +1,933 @@
+{
+ "investigation_id": "inv-04a23ec41c",
+ "mode": "graph",
+ "algorithm": "causal-frontier/1.1",
+ "scoring_profile": "evidence",
+ "incident": {
+  "id": "inc-5002",
+  "title": "Elevated errors/latency on Frontend Proxy (Envoy)",
+  "severity": "SEV2",
+  "opened_at": 1842020190,
+  "status": "OPEN",
+  "service": "frontend-proxy"
+ },
+ "abstain_reason": null,
+ "candidates": [
+  {
+   "id": "product-catalog",
+   "label": "Service",
+   "name": "Product Catalog",
+   "score": 6.2566,
+   "confidence": 0.9809,
+   "features": {
+    "frontier": 0.0,
+    "coverage": 0.5833333333333334,
+    "onset": 0.6666666666666666,
+    "change": 0.9408,
+    "severity": 0.4166666666666667,
+    "common": 0.0,
+    "exposed": 1.0,
+    "lag": 1.0
+   },
+   "evidence": [
+    {
+     "kind": "call_path",
+     "statement": "Frontend Proxy (Envoy) calls Frontend synchronously; degraded -> degraded",
+     "refs": [
+      "frontend-proxy",
+      "frontend"
+     ]
+    },
+    {
+     "kind": "call_path",
+     "statement": "Frontend calls Product Catalog synchronously; degraded -> degraded",
+     "refs": [
+      "frontend",
+      "product-catalog"
+     ]
+    },
+    {
+     "kind": "telemetry",
+     "refs": [
+      "product-catalog"
+     ],
+     "statement": "Product Catalog: error rate 0.9% (baseline 0.1%), p99 514.62 ms (baseline 43.13 ms), anomaly 0.7153"
+    },
+    {
+     "kind": "frontier",
+     "refs": [
+      "product-catalog",
+      "postgresql"
+     ],
+     "statement": "Product Catalog has degraded dependencies (postgresql); it may be a victim rather than the origin"
+    },
+    {
+     "kind": "onset",
+     "refs": [
+      "product-catalog"
+     ],
+     "statement": "Degraded no later than 67% of the other impacted services (onset t=1842020000)"
+    },
+    {
+     "kind": "change",
+     "refs": [
+      "chg-5002-01",
+      "product-catalog"
+     ],
+     "statement": "Change chg-5002-01 (deploy: Deploy product-catalog v3.29.7) by sre-oncall landed 3m33s before the anomaly began"
+    },
+    {
+     "kind": "coverage",
+     "refs": [
+      "product-catalog"
+     ],
+     "statement": "Explains 58% of the other degraded services on the propagation path (they depend on it, directly or transitively)"
+    }
+   ],
+   "path": [
+    "frontend-proxy",
+    "frontend",
+    "product-catalog"
+   ],
+   "predicted_recovery": []
+  },
+  {
+   "id": "ad",
+   "label": "Service",
+   "name": "Ad",
+   "score": 4.8333,
+   "confidence": 0.0168,
+   "features": {
+    "frontier": 1.0,
+    "coverage": 0.4166666666666667,
+    "onset": 0.75,
+    "change": 0.0,
+    "severity": 0.8333333333333334,
+    "common": 0.0,
+    "exposed": 0.0,
+    "lag": 1.0
+   },
+   "evidence": [
+    {
+     "kind": "call_path",
+     "statement": "Frontend Proxy (Envoy) calls Frontend synchronously; degraded -> degraded",
+     "refs": [
+      "frontend-proxy",
+      "frontend"
+     ]
+    },
+    {
+     "kind": "call_path",
+     "statement": "Frontend calls Ad synchronously; degraded -> degraded",
+     "refs": [
+      "frontend",
+      "ad"
+     ]
+    },
+    {
+     "kind": "telemetry",
+     "refs": [
+      "ad"
+     ],
+     "statement": "Ad: error rate 17.2% (baseline 1.0%), p99 446.83 ms (baseline 46.45 ms), anomaly 1.0"
+    },
+    {
+     "kind": "frontier",
+     "refs": [
+      "ad"
+     ],
+     "statement": "None of Ad's dependencies are degraded, so nothing downstream explains it"
+    },
+    {
+     "kind": "onset",
+     "refs": [
+      "ad"
+     ],
+     "statement": "Degraded no later than 75% of the other impacted services (onset t=1842019918)"
+    },
+    {
+     "kind": "coverage",
+     "refs": [
+      "ad"
+     ],
+     "statement": "Explains 42% of the other degraded services on the propagation path (they depend on it, directly or transitively)"
+    }
+   ],
+   "path": [
+    "frontend-proxy",
+    "frontend",
+    "ad"
+   ],
+   "predicted_recovery": [
+    "ad"
+   ]
+  },
+  {
+   "id": "frontend",
+   "label": "Service",
+   "name": "Frontend",
+   "score": 4.0,
+   "confidence": 0.0016,
+   "features": {
+    "frontier": 0.0,
+    "coverage": 0.3333333333333333,
+    "onset": 0.5,
+    "change": 0.0,
+    "severity": 0.8333333333333334,
+    "common": 0.0,
+    "exposed": 1.0,
+    "lag": 1.0
+   },
+   "evidence": [
+    {
+     "kind": "call_path",
+     "statement": "Frontend Proxy (Envoy) calls Frontend synchronously; degraded -> degraded",
+     "refs": [
+      "frontend-proxy",
+      "frontend"
+     ]
+    },
+    {
+     "kind": "telemetry",
+     "refs": [
+      "frontend"
+     ],
+     "statement": "Frontend: error rate 13.5% (baseline 0.9%), p99 44.95 ms (baseline 42.18 ms), anomaly 1.0"
+    },
+    {
+     "kind": "frontier",
+     "refs": [
+      "frontend",
+      "ad",
+      "recommendation",
+      "checkout",
+      "currency",
+      "product-catalog"
+     ],
+     "statement": "Frontend has degraded dependencies (ad, recommendation, checkout, currency, product-catalog); it may be a victim rather than the origin"
+    },
+    {
+     "kind": "onset",
+     "refs": [
+      "frontend"
+     ],
+     "statement": "Degraded no later than 50% of the other impacted services (onset t=1842020026)"
+    },
+    {
+     "kind": "coverage",
+     "refs": [
+      "frontend"
+     ],
+     "statement": "Explains 33% of the other degraded services on the propagation path (they depend on it, directly or transitively)"
+    }
+   ],
+   "path": [
+    "frontend-proxy",
+    "frontend"
+   ],
+   "predicted_recovery": []
+  },
+  {
+   "id": "currency",
+   "label": "Service",
+   "name": "Currency",
+   "score": 3.25,
+   "confidence": 0.0002,
+   "features": {
+    "frontier": 1.0,
+    "coverage": 0.5,
+    "onset": 1.0,
+    "change": 0.0,
+    "severity": 0.0,
+    "common": 0.0,
+    "exposed": 1.0,
+    "lag": 0.0
+   },
+   "evidence": [],
+   "path": [],
+   "predicted_recovery": []
+  },
+  {
+   "id": "mcp",
+   "label": "Service",
+   "name": "MCP",
+   "score": 3.25,
+   "confidence": 0.0002,
+   "features": {
+    "frontier": 0.0,
+    "coverage": 0.25,
+    "onset": 0.16666666666666666,
+    "change": 0.0,
+    "severity": 0.8333333333333334,
+    "common": 0.0,
+    "exposed": 1.0,
+    "lag": 1.0
+   },
+   "evidence": [],
+   "path": [],
+   "predicted_recovery": []
+  }
+ ],
+ "root_cause": {
+  "id": "product-catalog",
+  "label": "Service",
+  "name": "Product Catalog",
+  "score": 6.2566,
+  "confidence": 0.9809,
+  "features": {
+   "frontier": 0.0,
+   "coverage": 0.5833333333333334,
+   "onset": 0.6666666666666666,
+   "change": 0.9408,
+   "severity": 0.4166666666666667,
+   "common": 0.0,
+   "exposed": 1.0,
+   "lag": 1.0
+  },
+  "evidence": [
+   {
+    "kind": "call_path",
+    "statement": "Frontend Proxy (Envoy) calls Frontend synchronously; degraded -> degraded",
+    "refs": [
+     "frontend-proxy",
+     "frontend"
+    ]
+   },
+   {
+    "kind": "call_path",
+    "statement": "Frontend calls Product Catalog synchronously; degraded -> degraded",
+    "refs": [
+     "frontend",
+     "product-catalog"
+    ]
+   },
+   {
+    "kind": "telemetry",
+    "refs": [
+     "product-catalog"
+    ],
+    "statement": "Product Catalog: error rate 0.9% (baseline 0.1%), p99 514.62 ms (baseline 43.13 ms), anomaly 0.7153"
+   },
+   {
+    "kind": "frontier",
+    "refs": [
+     "product-catalog",
+     "postgresql"
+    ],
+    "statement": "Product Catalog has degraded dependencies (postgresql); it may be a victim rather than the origin"
+   },
+   {
+    "kind": "onset",
+    "refs": [
+     "product-catalog"
+    ],
+    "statement": "Degraded no later than 67% of the other impacted services (onset t=1842020000)"
+   },
+   {
+    "kind": "change",
+    "refs": [
+     "chg-5002-01",
+     "product-catalog"
+    ],
+    "statement": "Change chg-5002-01 (deploy: Deploy product-catalog v3.29.7) by sre-oncall landed 3m33s before the anomaly began"
+   },
+   {
+    "kind": "coverage",
+    "refs": [
+     "product-catalog"
+    ],
+    "statement": "Explains 58% of the other degraded services on the propagation path (they depend on it, directly or transitively)"
+   }
+  ],
+  "path": [
+   "frontend-proxy",
+   "frontend",
+   "product-catalog"
+  ],
+  "predicted_recovery": []
+ },
+ "subgraph": {
+  "nodes": [
+   {
+    "id": "frontend",
+    "name": "Frontend",
+    "kind": "service",
+    "anomaly": 1.0,
+    "onset": 1842020026,
+    "degraded": true,
+    "host": "node-a",
+    "error_rate": 0.1349,
+    "p99_ms": 44.95
+   },
+   {
+    "id": "ad",
+    "name": "Ad",
+    "kind": "service",
+    "anomaly": 1.0,
+    "onset": 1842019918,
+    "degraded": true,
+    "host": "node-c",
+    "error_rate": 0.1719,
+    "p99_ms": 446.83
+   },
+   {
+    "id": "postgresql",
+    "name": "astronomy-db (PostgreSQL)",
+    "kind": "database",
+    "anomaly": 1.0,
+    "onset": 1842020018,
+    "degraded": true,
+    "host": "node-e",
+    "error_rate": 0.3059,
+    "p99_ms": 419.58
+   },
+   {
+    "id": "frontend-proxy",
+    "name": "Frontend Proxy (Envoy)",
+    "kind": "proxy",
+    "anomaly": 0.4306,
+    "onset": 1842020046,
+    "degraded": true,
+    "host": "node-a",
+    "error_rate": 0.0137,
+    "p99_ms": 156.37
+   },
+   {
+    "id": "image-provider",
+    "name": "Image Provider (nginx)",
+    "kind": "service",
+    "anomaly": 0.6775,
+    "onset": 1842019417,
+    "degraded": true,
+    "host": "node-a",
+    "error_rate": 0.0138,
+    "p99_ms": 606.15
+   },
+   {
+    "id": "recommendation",
+    "name": "Recommendation",
+    "kind": "service",
+    "anomaly": 0.7962,
+    "onset": 1842020036,
+    "degraded": true,
+    "host": "node-c",
+    "error_rate": 0.0114,
+    "p99_ms": 1059.88
+   },
+   {
+    "id": "checkout",
+    "name": "Checkout",
+    "kind": "service",
+    "anomaly": 0.845,
+    "onset": 1842020058,
+    "degraded": true,
+    "host": "node-b",
+    "error_rate": 0.0904,
+    "p99_ms": 96.23
+   },
+   {
+    "id": "email",
+    "name": "Email",
+    "kind": "service",
+    "anomaly": 0.636,
+    "onset": 1842018606,
+    "degraded": true,
+    "host": "node-b",
+    "error_rate": 0.0696,
+    "p99_ms": 665.77
+   },
+   {
+    "id": "currency",
+    "name": "Currency",
+    "kind": "service",
+    "anomaly": 0.342,
+    "onset": 1842018558,
+    "degraded": true,
+    "host": "node-b",
+    "error_rate": 0.0353,
+    "p99_ms": 69.15
+   },
+   {
+    "id": "product-catalog",
+    "name": "Product Catalog",
+    "kind": "service",
+    "anomaly": 0.7153,
+    "onset": 1842020000,
+    "degraded": true,
+    "host": "node-d",
+    "error_rate": 0.0089,
+    "p99_ms": 514.62
+   },
+   {
+    "id": "chatbot",
+    "name": "Chatbot",
+    "kind": "service",
+    "anomaly": 1.0,
+    "onset": 1842020155,
+    "degraded": true,
+    "host": "node-g",
+    "error_rate": 0.1265,
+    "p99_ms": 187.31
+   },
+   {
+    "id": "agent",
+    "name": "Agent",
+    "kind": "service",
+    "anomaly": 0.6285,
+    "onset": 1842020084,
+    "degraded": true,
+    "host": "node-g",
+    "error_rate": 0.0092,
+    "p99_ms": 563.77
+   },
+   {
+    "id": "mcp",
+    "name": "MCP",
+    "kind": "service",
+    "anomaly": 1.0,
+    "onset": 1842020082,
+    "degraded": true,
+    "host": "node-g",
+    "error_rate": 0.1644,
+    "p99_ms": 327.34
+   }
+  ],
+  "edges": [
+   {
+    "src": "frontend-proxy",
+    "dst": "frontend",
+    "has_fallback": false
+   },
+   {
+    "src": "frontend-proxy",
+    "dst": "image-provider",
+    "has_fallback": false
+   },
+   {
+    "src": "frontend-proxy",
+    "dst": "chatbot",
+    "has_fallback": false
+   },
+   {
+    "src": "frontend",
+    "dst": "ad",
+    "has_fallback": true
+   },
+   {
+    "src": "frontend",
+    "dst": "recommendation",
+    "has_fallback": true
+   },
+   {
+    "src": "frontend",
+    "dst": "checkout",
+    "has_fallback": false
+   },
+   {
+    "src": "frontend",
+    "dst": "currency",
+    "has_fallback": false
+   },
+   {
+    "src": "frontend",
+    "dst": "product-catalog",
+    "has_fallback": false
+   },
+   {
+    "src": "chatbot",
+    "dst": "agent",
+    "has_fallback": false
+   },
+   {
+    "src": "recommendation",
+    "dst": "product-catalog",
+    "has_fallback": false
+   },
+   {
+    "src": "checkout",
+    "dst": "email",
+    "has_fallback": false
+   },
+   {
+    "src": "checkout",
+    "dst": "currency",
+    "has_fallback": false
+   },
+   {
+    "src": "checkout",
+    "dst": "product-catalog",
+    "has_fallback": false
+   },
+   {
+    "src": "product-catalog",
+    "dst": "postgresql",
+    "has_fallback": false
+   },
+   {
+    "src": "agent",
+    "dst": "frontend",
+    "has_fallback": false
+   },
+   {
+    "src": "agent",
+    "dst": "mcp",
+    "has_fallback": false
+   },
+   {
+    "src": "mcp",
+    "dst": "frontend",
+    "has_fallback": false
+   }
+  ],
+  "blind_spots": []
+ },
+ "blast_radius": {
+  "roots": [
+   "product-catalog"
+  ],
+  "impacted": [
+   {
+    "id": "checkout",
+    "hops": 1,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "high",
+    "degraded": true
+   },
+   {
+    "id": "frontend",
+    "hops": 1,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "high",
+    "degraded": true
+   },
+   {
+    "id": "recommendation",
+    "hops": 1,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "normal",
+    "degraded": true
+   },
+   {
+    "id": "agent",
+    "hops": 2,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "normal",
+    "degraded": true
+   },
+   {
+    "id": "frontend-proxy",
+    "hops": 2,
+    "sync": true,
+    "entrypoint": true,
+    "criticality": "high",
+    "degraded": true
+   },
+   {
+    "id": "mcp",
+    "hops": 2,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "normal",
+    "degraded": true
+   },
+   {
+    "id": "chatbot",
+    "hops": 3,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "normal",
+    "degraded": true
+   }
+  ],
+  "entrypoints": [
+   "frontend-proxy"
+  ],
+  "sync_count": 7,
+  "async_only_count": 0,
+  "high_criticality": [
+   "checkout",
+   "frontend",
+   "frontend-proxy"
+  ],
+  "max_hops": 3,
+  "elapsed_ms": 4.409100001794286
+ },
+ "breakers": {
+  "status": "ok",
+  "max_flow": 1240.0,
+  "cut": [
+   {
+    "src": "checkout",
+    "dst": "product-catalog",
+    "cost": 240,
+    "rps": 240,
+    "breaker": true,
+    "has_fallback": false,
+    "target_degraded": true
+   },
+   {
+    "src": "frontend",
+    "dst": "product-catalog",
+    "cost": 700,
+    "rps": 700,
+    "breaker": true,
+    "has_fallback": false,
+    "target_degraded": true
+   },
+   {
+    "src": "recommendation",
+    "dst": "product-catalog",
+    "cost": 300,
+    "rps": 300,
+    "breaker": true,
+    "has_fallback": false,
+    "target_degraded": true
+   }
+  ],
+  "cut_cost": 1240,
+  "shed_rps": 1240,
+  "naive": {
+   "edges": [
+    {
+     "src": "frontend",
+     "dst": "product-catalog",
+     "rps": 700,
+     "breaker": true,
+     "cost": 700
+    },
+    {
+     "src": "recommendation",
+     "dst": "product-catalog",
+     "rps": 300,
+     "breaker": true,
+     "cost": 300
+    },
+    {
+     "src": "checkout",
+     "dst": "product-catalog",
+     "rps": 240,
+     "breaker": true,
+     "cost": 240
+    }
+   ],
+   "feasible": true,
+   "cost": 1240
+  },
+  "elapsed_ms": 5.504800006747246
+ },
+ "who_to_page": {
+  "outcome": "answered_with_path",
+  "answer": "Page Bob Tanaka (on-call owner, knows this service); Farah Siddiqui (knows this service)",
+  "people": [
+   {
+    "person": "p-bob",
+    "name": "Bob Tanaka",
+    "role": "on-call owner",
+    "priority": 1,
+    "path": [
+     "p-bob",
+     "ON_CALL",
+     "team-catalog",
+     "OWNS",
+     "product-catalog"
+    ],
+    "reason": "on call for Catalog & Fulfilment, which owns product-catalog"
+   },
+   {
+    "person": "p-bob",
+    "name": "Bob Tanaka",
+    "role": "knows this service",
+    "priority": 3,
+    "path": [
+     "p-bob",
+     "WORKED_ON",
+     "product-catalog"
+    ],
+    "reason": "85 commits on product-catalog"
+   },
+   {
+    "person": "p-farah",
+    "name": "Farah Siddiqui",
+    "role": "knows this service",
+    "priority": 3,
+    "path": [
+     "p-farah",
+     "WORKED_ON",
+     "product-catalog"
+    ],
+    "reason": "57 commits on product-catalog"
+   }
+  ]
+ },
+ "actions": [
+  {
+   "id": "inv-04a23ec41c-a1",
+   "kind": "rollback_change",
+   "summary": "Roll back chg-5002-01 on product-catalog",
+   "target_id": "chg-5002-01",
+   "target_label": "Change",
+   "risk": "low",
+   "rationale": "Change chg-5002-01 (deploy: Deploy product-catalog v3.29.7) by sre-oncall landed 3m33s before the anomaly began",
+   "refs": [
+    "chg-5002-01",
+    "product-catalog"
+   ],
+   "requires_approval": true,
+   "status": "PROPOSED",
+   "expected_recovery": [],
+   "fix_target": "product-catalog",
+   "fix_label": "Service"
+  },
+  {
+   "id": "inv-04a23ec41c-a2",
+   "kind": "circuit_breakers",
+   "summary": "Open circuit breakers on checkout->product-catalog, frontend->product-catalog, recommendation->product-catalog",
+   "target_id": "product-catalog",
+   "target_label": "Service",
+   "risk": "low",
+   "rationale": "Minimum cut from entrypoints to the root (FalkorDB algo.maxFlow): cost 1240, sheds 1240 rps; same as breaking every direct caller",
+   "refs": [
+    "checkout",
+    "frontend",
+    "recommendation",
+    "product-catalog",
+    "product-catalog",
+    "product-catalog"
+   ],
+   "requires_approval": true,
+   "status": "PROPOSED",
+   "edges": [
+    [
+     "checkout",
+     "product-catalog"
+    ],
+    [
+     "frontend",
+     "product-catalog"
+    ],
+    [
+     "recommendation",
+     "product-catalog"
+    ]
+   ]
+  },
+  {
+   "id": "inv-04a23ec41c-a3",
+   "kind": "page",
+   "summary": "Page Bob Tanaka (on-call owner for product-catalog)",
+   "target_id": "p-bob",
+   "target_label": "Person",
+   "risk": "none",
+   "rationale": "Bob Tanaka: on call for Catalog & Fulfilment, which owns product-catalog; Bob Tanaka: 85 commits on product-catalog; Farah Siddiqui: 57 commits on product-catalog",
+   "refs": [
+    "p-bob",
+    "product-catalog"
+   ],
+   "requires_approval": false,
+   "status": "ADVISORY"
+  },
+  {
+   "id": "inv-04a23ec41c-a4",
+   "kind": "advisory",
+   "summary": "Do not restart frontend-proxy",
+   "target_id": "frontend-proxy",
+   "target_label": "Service",
+   "risk": "none",
+   "rationale": "frontend-proxy is degraded because of what it calls: path frontend-proxy -> frontend -> product-catalog",
+   "refs": [
+    "frontend-proxy",
+    "frontend",
+    "product-catalog"
+   ],
+   "requires_approval": false,
+   "status": "ADVISORY"
+  }
+ ],
+ "similar_incidents": [
+  {
+   "incident": "inc-5000",
+   "title": "Elevated errors/latency on Frontend Proxy (Envoy)",
+   "status": "ARCHIVED",
+   "jaccard": 0.647,
+   "confirmed_root": null,
+   "confirmed_by": null,
+   "resolved_by": []
+  },
+  {
+   "incident": "inc-5010",
+   "title": "Elevated errors/latency on Frontend Proxy (Envoy)",
+   "status": "ARCHIVED",
+   "jaccard": 0.333,
+   "confirmed_root": null,
+   "confirmed_by": null,
+   "resolved_by": []
+  }
+ ],
+ "narrative": {
+  "text": "Incident inc-5002 (Elevated errors/latency on Frontend Proxy (Envoy)) most likely originates at service product-catalog (relative confidence 98%). The failure propagates along frontend-proxy -> frontend -> product-catalog. Product Catalog has degraded dependencies (postgresql); it may be a victim rather than the origin. Change chg-5002-01 (deploy: Deploy product-catalog v3.29.7) by sre-oncall landed 3m33s before the anomaly began. Blast radius: 7 upstream services (7 synchronously exposed), entrypoints: frontend-proxy.",
+  "source": "template",
+  "violations": [],
+  "llm_ms": null
+ },
+ "trace": [
+  {
+   "tool": "get_incident",
+   "purpose": "Load the incident and the service it was reported on",
+   "result": "reported on frontend-proxy",
+   "ms": 1.86
+  },
+  {
+   "tool": "extract_anomalous_subgraph",
+   "purpose": "Follow synchronous CALLS downstream through degraded/unknown services",
+   "result": "13 services, 17 calls, 13 degraded, 0 blind spots, 7 Cypher queries",
+   "ms": 11.39
+  },
+  {
+   "tool": "score_candidates",
+   "purpose": "Score frontier/coverage/onset/change/host/lag evidence",
+   "result": "product-catalog 98%, ad 2%, frontend 0% (profile: evidence)",
+   "ms": 0.67
+  },
+  {
+   "tool": "recall_similar_incidents",
+   "purpose": "Look for past incidents with overlapping impact",
+   "result": "2 similar past incidents",
+   "ms": 5.8
+  },
+  {
+   "tool": "blast_radius",
+   "purpose": "Upstream BFS from the root over CALLS",
+   "result": "7 impacted, entrypoints ['frontend-proxy']",
+   "ms": 4.43
+  },
+  {
+   "tool": "breaker_min_cut",
+   "purpose": "algo.maxFlow over cut_cost, then residual min-cut",
+   "result": "3 breakers, cost 1240",
+   "ms": 5.52
+  },
+  {
+   "tool": "who_to_page",
+   "purpose": "On-call owner, change authors and people with history (ON_CALL, AUTHORED, WORKED_ON)",
+   "result": "Page Bob Tanaka (on-call owner, knows this service); Farah Siddiqui (knows this service)",
+   "ms": 4.75
+  },
+  {
+   "tool": "propose_actions",
+   "purpose": "Derive actions from the evidence; mutating ones need approval",
+   "result": "2 need approval, 2 advisories",
+   "ms": 2.2
+  },
+  {
+   "tool": "narrate",
+   "purpose": "Summarise from evidence (LLM optional, grounding-checked)",
+   "result": "template",
+   "ms": 0.07
+  }
+ ],
+ "elapsed_ms": 37.06
+}

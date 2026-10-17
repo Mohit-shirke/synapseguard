@@ -1,0 +1,10 @@
+{
+ "scenario": "noisy-neighbour",
+ "incident": "inc-5000",
+ "loaded": {
+  "services": 23,
+  "edges": 35,
+  "hosts": 7,
+  "changes": 3
+ }
+}

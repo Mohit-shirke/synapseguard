@@ -1,0 +1,56 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "load_bearing",
+ "args": {
+  "limit": 5
+ },
+ "services": [
+  {
+   "service": "frontend",
+   "pagerank": 0.0851,
+   "called_by": [
+    "agent",
+    "frontend-proxy",
+    "mcp"
+   ]
+  },
+  {
+   "service": "postgresql",
+   "pagerank": 0.0786,
+   "called_by": [
+    "accounting",
+    "product-catalog"
+   ]
+  },
+  {
+   "service": "flagd",
+   "pagerank": 0.1212,
+   "called_by": [
+    "ad",
+    "cart",
+    "fraud-detection",
+    "frontend-proxy",
+    "payment",
+    "recommendation"
+   ]
+  },
+  {
+   "service": "quote",
+   "pagerank": 0.0562,
+   "called_by": [
+    "shipping"
+   ]
+  },
+  {
+   "service": "product-catalog",
+   "pagerank": 0.0527,
+   "called_by": [
+    "checkout",
+    "frontend",
+    "recommendation"
+   ]
+  }
+ ],
+ "answer": "Most load-bearing: frontend, postgresql, flagd, quote, product-catalog",
+ "ms": 1.59
+}

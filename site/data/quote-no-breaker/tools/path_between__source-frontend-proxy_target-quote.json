@@ -1,0 +1,17 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "path_between",
+ "args": {
+  "source": "frontend-proxy",
+  "target": "quote"
+ },
+ "path": [
+  "frontend-proxy",
+  "frontend",
+  "shipping",
+  "quote"
+ ],
+ "weight": 3,
+ "answer": "frontend-proxy depends on quote: frontend-proxy -> frontend -> shipping -> quote",
+ "ms": 4.4
+}

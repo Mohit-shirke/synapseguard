@@ -1,0 +1,740 @@
+{
+ "nodes": [
+  {
+   "id": "node-a",
+   "label": "Host",
+   "name": "k8s-node-a",
+   "degraded": null,
+   "anomaly": null,
+   "kind": null,
+   "cpu": 23.3
+  },
+  {
+   "id": "node-b",
+   "label": "Host",
+   "name": "k8s-node-b",
+   "degraded": null,
+   "anomaly": null,
+   "kind": null,
+   "cpu": 33.3
+  },
+  {
+   "id": "node-c",
+   "label": "Host",
+   "name": "k8s-node-c",
+   "degraded": null,
+   "anomaly": null,
+   "kind": null,
+   "cpu": 28.6
+  },
+  {
+   "id": "node-d",
+   "label": "Host",
+   "name": "k8s-node-d",
+   "degraded": null,
+   "anomaly": null,
+   "kind": null,
+   "cpu": 94.3
+  },
+  {
+   "id": "node-e",
+   "label": "Host",
+   "name": "k8s-node-e",
+   "degraded": null,
+   "anomaly": null,
+   "kind": null,
+   "cpu": 59.3
+  },
+  {
+   "id": "node-f",
+   "label": "Host",
+   "name": "k8s-node-f",
+   "degraded": null,
+   "anomaly": null,
+   "kind": null,
+   "cpu": 60.8
+  },
+  {
+   "id": "node-g",
+   "label": "Host",
+   "name": "k8s-node-g",
+   "degraded": null,
+   "anomaly": null,
+   "kind": null,
+   "cpu": 20.2
+  },
+  {
+   "id": "frontend-proxy",
+   "label": "Service",
+   "name": "Frontend Proxy (Envoy)",
+   "degraded": true,
+   "anomaly": 1.0,
+   "kind": "proxy",
+   "cpu": null
+  },
+  {
+   "id": "frontend",
+   "label": "Service",
+   "name": "Frontend",
+   "degraded": false,
+   "anomaly": null,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "image-provider",
+   "label": "Service",
+   "name": "Image Provider (nginx)",
+   "degraded": false,
+   "anomaly": 0.0,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "ad",
+   "label": "Service",
+   "name": "Ad",
+   "degraded": false,
+   "anomaly": 0.0784,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "cart",
+   "label": "Service",
+   "name": "Cart",
+   "degraded": false,
+   "anomaly": 0.044,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "cache",
+   "label": "Service",
+   "name": "Cache (Valkey)",
+   "degraded": true,
+   "anomaly": 0.6504,
+   "kind": "cache",
+   "cpu": null
+  },
+  {
+   "id": "recommendation",
+   "label": "Service",
+   "name": "Recommendation",
+   "degraded": false,
+   "anomaly": 0.003,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "checkout",
+   "label": "Service",
+   "name": "Checkout",
+   "degraded": true,
+   "anomaly": 1.0,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "payment",
+   "label": "Service",
+   "name": "Payment",
+   "degraded": true,
+   "anomaly": 0.3634,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "email",
+   "label": "Service",
+   "name": "Email",
+   "degraded": false,
+   "anomaly": 0.0456,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "currency",
+   "label": "Service",
+   "name": "Currency",
+   "degraded": false,
+   "anomaly": 0.0609,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "product-catalog",
+   "label": "Service",
+   "name": "Product Catalog",
+   "degraded": false,
+   "anomaly": 0.0748,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "shipping",
+   "label": "Service",
+   "name": "Shipping",
+   "degraded": false,
+   "anomaly": 0.0922,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "quote",
+   "label": "Service",
+   "name": "Quote",
+   "degraded": false,
+   "anomaly": 0.0257,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "postgresql",
+   "label": "Service",
+   "name": "astronomy-db (PostgreSQL)",
+   "degraded": false,
+   "anomaly": 0.0764,
+   "kind": "database",
+   "cpu": null
+  },
+  {
+   "id": "accounting",
+   "label": "Service",
+   "name": "Accounting",
+   "degraded": false,
+   "anomaly": 0.027,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "queue",
+   "label": "Service",
+   "name": "Queue (Kafka)",
+   "degraded": false,
+   "anomaly": 0.0,
+   "kind": "queue",
+   "cpu": null
+  },
+  {
+   "id": "fraud-detection",
+   "label": "Service",
+   "name": "Fraud Detection",
+   "degraded": false,
+   "anomaly": 0.0695,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "flagd",
+   "label": "Service",
+   "name": "Flagd",
+   "degraded": true,
+   "anomaly": 0.736,
+   "kind": "flags",
+   "cpu": null
+  },
+  {
+   "id": "flagd-ui",
+   "label": "Service",
+   "name": "Flagd UI",
+   "degraded": false,
+   "anomaly": 0.0,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "chatbot",
+   "label": "Service",
+   "name": "Chatbot",
+   "degraded": true,
+   "anomaly": 0.794,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "agent",
+   "label": "Service",
+   "name": "Agent",
+   "degraded": true,
+   "anomaly": 0.342,
+   "kind": "service",
+   "cpu": null
+  },
+  {
+   "id": "mcp",
+   "label": "Service",
+   "name": "MCP",
+   "degraded": true,
+   "anomaly": 1.0,
+   "kind": "service",
+   "cpu": null
+  }
+ ],
+ "edges": [
+  {
+   "src": "frontend-proxy",
+   "dst": "node-a",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend-proxy",
+   "dst": "frontend",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend-proxy",
+   "dst": "image-provider",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend-proxy",
+   "dst": "flagd",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend-proxy",
+   "dst": "flagd-ui",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend-proxy",
+   "dst": "chatbot",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend",
+   "dst": "node-a",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend",
+   "dst": "ad",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend",
+   "dst": "cart",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend",
+   "dst": "recommendation",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend",
+   "dst": "checkout",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend",
+   "dst": "currency",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend",
+   "dst": "product-catalog",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "frontend",
+   "dst": "shipping",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "image-provider",
+   "dst": "node-a",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "ad",
+   "dst": "node-c",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "ad",
+   "dst": "flagd",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "cart",
+   "dst": "node-c",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "cart",
+   "dst": "cache",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "cart",
+   "dst": "flagd",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "cache",
+   "dst": "node-c",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "recommendation",
+   "dst": "node-c",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "recommendation",
+   "dst": "product-catalog",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "recommendation",
+   "dst": "flagd",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "checkout",
+   "dst": "node-b",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "checkout",
+   "dst": "cart",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "checkout",
+   "dst": "payment",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "checkout",
+   "dst": "email",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "checkout",
+   "dst": "currency",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "checkout",
+   "dst": "product-catalog",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "checkout",
+   "dst": "shipping",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "checkout",
+   "dst": "queue",
+   "type": "CALLS",
+   "sync": false,
+   "breaker_open": null
+  },
+  {
+   "src": "payment",
+   "dst": "node-b",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "payment",
+   "dst": "flagd",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "email",
+   "dst": "node-b",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "currency",
+   "dst": "node-b",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "product-catalog",
+   "dst": "node-d",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "product-catalog",
+   "dst": "postgresql",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "shipping",
+   "dst": "node-d",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "shipping",
+   "dst": "quote",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "quote",
+   "dst": "node-d",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "postgresql",
+   "dst": "node-e",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "accounting",
+   "dst": "node-e",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "accounting",
+   "dst": "postgresql",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "accounting",
+   "dst": "queue",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "queue",
+   "dst": "node-f",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "fraud-detection",
+   "dst": "node-f",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "fraud-detection",
+   "dst": "queue",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "fraud-detection",
+   "dst": "flagd",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "flagd",
+   "dst": "node-f",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "flagd-ui",
+   "dst": "node-f",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "chatbot",
+   "dst": "node-g",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "chatbot",
+   "dst": "agent",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "agent",
+   "dst": "node-g",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "agent",
+   "dst": "frontend",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "agent",
+   "dst": "mcp",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  },
+  {
+   "src": "mcp",
+   "dst": "node-g",
+   "type": "RUNS_ON",
+   "sync": null,
+   "breaker_open": null
+  },
+  {
+   "src": "mcp",
+   "dst": "frontend",
+   "type": "CALLS",
+   "sync": true,
+   "breaker_open": null
+  }
+ ],
+ "changes": [
+  {
+   "id": "chg-5010-05",
+   "kind": "deploy",
+   "summary": "Routine deploy on agent",
+   "at": 1842094305,
+   "target": "agent"
+  },
+  {
+   "id": "chg-5010-03",
+   "kind": "config",
+   "summary": "Routine config on queue",
+   "at": 1842099445,
+   "target": "queue"
+  },
+  {
+   "id": "chg-5010-02",
+   "kind": "config",
+   "summary": "Routine config on cart",
+   "at": 1842099655,
+   "target": "cart"
+  },
+  {
+   "id": "chg-5010-06",
+   "kind": "feature_flag",
+   "summary": "Routine feature_flag on recommendation",
+   "at": 1842099702,
+   "target": "recommendation"
+  },
+  {
+   "id": "chg-5010-01",
+   "kind": "feature_flag",
+   "summary": "Enable flag paymentFailure",
+   "at": 1842099921,
+   "target": "payment"
+  },
+  {
+   "id": "chg-5010-08",
+   "kind": "deploy",
+   "summary": "Deploy frontend (red herring)",
+   "at": 1842099951,
+   "target": "frontend"
+  },
+  {
+   "id": "chg-5010-04",
+   "kind": "feature_flag",
+   "summary": "Routine feature_flag on mcp",
+   "at": 1842100051,
+   "target": "mcp"
+  },
+  {
+   "id": "chg-5010-07",
+   "kind": "feature_flag",
+   "summary": "Routine feature_flag on checkout",
+   "at": 1842100204,
+   "target": "checkout"
+  }
+ ]
+}

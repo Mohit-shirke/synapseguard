@@ -1,0 +1,84 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "blast_radius",
+ "args": {
+  "service": "payment",
+  "depth": 4
+ },
+ "resolved": {
+  "status": "found",
+  "id": "payment",
+  "label": "Service",
+  "name": "Payment",
+  "query": "payment",
+  "exact": true
+ },
+ "paths": [
+  {
+   "service": "checkout",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "checkout",
+    "payment"
+   ]
+  },
+  {
+   "service": "frontend",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "frontend",
+    "checkout",
+    "payment"
+   ]
+  },
+  {
+   "service": "agent",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "agent",
+    "frontend",
+    "checkout",
+    "payment"
+   ]
+  },
+  {
+   "service": "frontend-proxy",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "checkout",
+    "payment"
+   ]
+  },
+  {
+   "service": "mcp",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "mcp",
+    "frontend",
+    "checkout",
+    "payment"
+   ]
+  },
+  {
+   "service": "chatbot",
+   "hops": 4,
+   "sync": true,
+   "via": [
+    "chatbot",
+    "agent",
+    "frontend",
+    "checkout",
+    "payment"
+   ]
+  }
+ ],
+ "answer": "6 services depend on payment within 4 hops: checkout, frontend, agent, frontend-proxy, mcp, chatbot",
+ "ms": 4.8
+}

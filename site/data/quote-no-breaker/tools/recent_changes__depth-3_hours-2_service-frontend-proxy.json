@@ -1,0 +1,86 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "recent_changes",
+ "args": {
+  "service": "frontend-proxy",
+  "hours": 2,
+  "depth": 3
+ },
+ "resolved": {
+  "status": "found",
+  "id": "frontend-proxy",
+  "label": "Service",
+  "name": "Frontend Proxy (Envoy)",
+  "query": "frontend-proxy",
+  "exact": true
+ },
+ "changes": [
+  {
+   "change": "chg-5000-04",
+   "kind": "config",
+   "summary": "Routine config on flagd",
+   "minutes_ago": 6,
+   "author": "ci-bot",
+   "target": "flagd",
+   "via": [
+    "frontend-proxy",
+    "flagd"
+   ]
+  },
+  {
+   "change": "chg-5000-01",
+   "kind": "deploy",
+   "summary": "Deploy quote v3.23.9",
+   "minutes_ago": 8,
+   "author": "platform-team",
+   "target": "quote",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "shipping",
+    "quote"
+   ]
+  },
+  {
+   "change": "chg-5000-05",
+   "kind": "feature_flag",
+   "summary": "Routine feature_flag on queue",
+   "minutes_ago": 9,
+   "author": "platform-team",
+   "target": "queue",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "checkout",
+    "queue"
+   ]
+  },
+  {
+   "change": "chg-5000-03",
+   "kind": "deploy",
+   "summary": "Routine deploy on ad",
+   "minutes_ago": 45,
+   "author": "platform-team",
+   "target": "ad",
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "ad"
+   ]
+  },
+  {
+   "change": "chg-5000-02",
+   "kind": "config",
+   "summary": "Routine config on flagd",
+   "minutes_ago": 72,
+   "author": "ci-bot",
+   "target": "flagd",
+   "via": [
+    "frontend-proxy",
+    "flagd"
+   ]
+  }
+ ],
+ "answer": "5 changes: chg-5000-04 on flagd (Routine config on flagd, 6 min ago); chg-5000-01 on quote (Deploy quote v3.23.9, 8 min ago); chg-5000-05 on queue (Routine feature_flag on queue, 9 min ago); chg-5000-03 on ad (Routine deploy on ad, 45 min ago)",
+ "ms": 6.9
+}

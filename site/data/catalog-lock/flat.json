@@ -1,0 +1,45 @@
+{
+ "mode": "flat",
+ "incident": {
+  "id": "inc-5002",
+  "title": "Elevated errors/latency on Frontend Proxy (Envoy)",
+  "severity": "SEV2",
+  "opened_at": 1842020190,
+  "status": "OPEN",
+  "service": "frontend-proxy"
+ },
+ "candidates": [
+  {
+   "id": "product-catalog",
+   "score": 1.9419
+  },
+  {
+   "id": "ad",
+   "score": 0.6923
+  },
+  {
+   "id": "postgresql",
+   "score": 0.6538
+  },
+  {
+   "id": "frontend",
+   "score": 0.6346
+  },
+  {
+   "id": "image-provider",
+   "score": 0.5503
+  }
+ ],
+ "root_cause": {
+  "id": "product-catalog",
+  "score": 1.9419
+ },
+ "unavailable": [
+  "causal path from symptom to root (needs CALLS traversal)",
+  "pruning of degraded services that cannot reach the symptom",
+  "blast radius (needs upstream traversal)",
+  "circuit-breaker placement (needs max-flow over CALLS)",
+  "predicted recovery set"
+ ],
+ "elapsed_ms": 7.04
+}

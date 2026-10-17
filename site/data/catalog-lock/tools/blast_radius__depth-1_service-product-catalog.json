@@ -1,0 +1,47 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "blast_radius",
+ "args": {
+  "service": "product-catalog",
+  "depth": 1
+ },
+ "resolved": {
+  "status": "found",
+  "id": "product-catalog",
+  "label": "Service",
+  "name": "Product Catalog",
+  "query": "product-catalog",
+  "exact": true
+ },
+ "paths": [
+  {
+   "service": "checkout",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "checkout",
+    "product-catalog"
+   ]
+  },
+  {
+   "service": "frontend",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "frontend",
+    "product-catalog"
+   ]
+  },
+  {
+   "service": "recommendation",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "recommendation",
+    "product-catalog"
+   ]
+  }
+ ],
+ "answer": "3 services depend on product-catalog within 1 hops: checkout, frontend, recommendation",
+ "ms": 2.58
+}

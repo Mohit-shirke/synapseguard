@@ -1,0 +1,88 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "blast_radius",
+ "args": {
+  "service": "product-catalog",
+  "depth": 4
+ },
+ "resolved": {
+  "status": "found",
+  "id": "product-catalog",
+  "label": "Service",
+  "name": "Product Catalog",
+  "query": "product-catalog",
+  "exact": true
+ },
+ "paths": [
+  {
+   "service": "checkout",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "checkout",
+    "product-catalog"
+   ]
+  },
+  {
+   "service": "frontend",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "frontend",
+    "product-catalog"
+   ]
+  },
+  {
+   "service": "recommendation",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "recommendation",
+    "product-catalog"
+   ]
+  },
+  {
+   "service": "agent",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "agent",
+    "frontend",
+    "product-catalog"
+   ]
+  },
+  {
+   "service": "frontend-proxy",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "product-catalog"
+   ]
+  },
+  {
+   "service": "mcp",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "mcp",
+    "frontend",
+    "product-catalog"
+   ]
+  },
+  {
+   "service": "chatbot",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "chatbot",
+    "agent",
+    "frontend",
+    "product-catalog"
+   ]
+  }
+ ],
+ "answer": "7 services depend on product-catalog within 4 hops: checkout, frontend, recommendation, agent, frontend-proxy, mcp, chatbot",
+ "ms": 5.64
+}

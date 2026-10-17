@@ -1,0 +1,113 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "blast_radius",
+ "args": {
+  "service": "postgresql",
+  "depth": 4
+ },
+ "resolved": {
+  "status": "found",
+  "id": "postgresql",
+  "label": "Service",
+  "name": "astronomy-db (PostgreSQL)",
+  "query": "postgresql",
+  "exact": true
+ },
+ "paths": [
+  {
+   "service": "accounting",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "accounting",
+    "postgresql"
+   ]
+  },
+  {
+   "service": "product-catalog",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "product-catalog",
+    "postgresql"
+   ]
+  },
+  {
+   "service": "checkout",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "checkout",
+    "product-catalog",
+    "postgresql"
+   ]
+  },
+  {
+   "service": "frontend",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "frontend",
+    "product-catalog",
+    "postgresql"
+   ]
+  },
+  {
+   "service": "recommendation",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "recommendation",
+    "product-catalog",
+    "postgresql"
+   ]
+  },
+  {
+   "service": "agent",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "agent",
+    "frontend",
+    "product-catalog",
+    "postgresql"
+   ]
+  },
+  {
+   "service": "frontend-proxy",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "product-catalog",
+    "postgresql"
+   ]
+  },
+  {
+   "service": "mcp",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "mcp",
+    "frontend",
+    "product-catalog",
+    "postgresql"
+   ]
+  },
+  {
+   "service": "chatbot",
+   "hops": 4,
+   "sync": true,
+   "via": [
+    "chatbot",
+    "agent",
+    "frontend",
+    "product-catalog",
+    "postgresql"
+   ]
+  }
+ ],
+ "answer": "9 services depend on postgresql within 4 hops: accounting, product-catalog, checkout, frontend, recommendation, agent, frontend-proxy, mcp, chatbot",
+ "ms": 4.67
+}

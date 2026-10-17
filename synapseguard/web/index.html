@@ -283,7 +283,34 @@ const EV = {call_path: ["i-path", "--blue"], telemetry: ["i-pulse", "--red"], fr
   coverage: ["i-graph", "--blue"], blind_spot: ["i-eye", "--gray"]};
 let cy, incident = null, last = null, scenarios = [];
 
+// Recorded-demo mode (GitHub Pages): replay real responses captured from the live app
+// by scripts/build_static_site.py. Writes and the local LLM need the live app.
+const STATIC = location.hostname.endsWith("github.io") || new URLSearchParams(location.search).get("static") === "1";
+let staticScenario = null, staticMeta = null;
+const toolKey = (tool, args) => (tool + "__" + Object.keys(args).sort().map(k => `${k}-${args[k]}`).join("_"))
+  .replace(/[^A-Za-z0-9_.-]/g, "_");
+async function staticGet(file) {
+  const r = await fetch(`data/${file}`);
+  if (!r.ok) throw new Error("This answer was not recorded. Run SynapseGuard locally for the live agent.");
+  return r.json();
+}
+async function staticApi(path, opts) {
+  const [p, query] = path.split("?");
+  const scn = staticScenario || scenarios[0]?.name || "payment-flag";
+  let m;
+  if (p === "/health") return {status: "recorded"};
+  if (p === "/api/scenarios") return staticGet("scenarios.json");
+  if ((m = p.match(/^\/api\/scenarios\/([^/]+)\/load$/))) { staticScenario = decodeURIComponent(m[1]); return staticGet(`${staticScenario}/load.json`); }
+  if (p === "/api/graph") return staticGet(`${scn}/graph.json`);
+  if (p === "/api/incidents") return staticGet(`${scn}/incidents.json`);
+  if (/\/investigate$/.test(p)) return staticGet(`${scn}/${(query || "").includes("mode=flat") ? "flat" : "investigate"}.json`);
+  if ((m = p.match(/^\/api\/tools\/([a-z_]+)$/))) return staticGet(`${scn}/tools/${toolKey(m[1], JSON.parse(opts.body || "{}"))}.json`);
+  if (p === "/api/ask") throw new Error("Ask LLM runs a local model: run SynapseGuard locally (README → Quick start). This page is a recorded demo.");
+  throw new Error("Recorded demo: approving, executing and confirming need the live app. Run it locally (README → Quick start).");
+}
+
 async function api(path, opts = {}) {
+  if (STATIC) return staticApi(path, opts);
   const r = await fetch(path, {headers: {"Content-Type": "application/json"}, ...opts});
   const body = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(body.detail || r.statusText);
@@ -295,6 +322,7 @@ function lock(on) { $("load").disabled = on; $("go").disabled = on || !incident;
 
 async function health() {
   const el = $("health");
+  if (STATIC) { el.className = "status ok"; el.lastElementChild.textContent = "Recorded demo" + (staticMeta ? ` · ${staticMeta.captured_on}` : ""); return; }
   try { await api("/health"); el.className = "status ok"; el.lastElementChild.textContent = "FalkorDB connected"; }
   catch { el.className = "status bad"; el.lastElementChild.textContent = "FalkorDB unavailable"; }
 }
@@ -321,6 +349,13 @@ function graphStyle() {
 }
 
 async function init() {
+  if (STATIC) {
+    staticMeta = await staticGet("meta.json").catch(() => null);
+    const n = document.createElement("p");
+    n.className = "notice";
+    n.innerHTML = `<svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><span><b>Recorded demo.</b> Every result on this page was captured from the running app${staticMeta ? ` on ${esc(staticMeta.captured_on)} (commit ${esc(staticMeta.commit)})` : ""}. Approve, execute and Ask LLM need the live agent: run it locally in one command (see the README).</span>`;
+    document.querySelector(".notice").before(n);
+  }
   health(); setInterval(health, 15000);
   scenarios = await api("/api/scenarios");
   $("scenario").innerHTML = scenarios.map(s => `<option value="${esc(s.name)}">${esc(s.title)}</option>`).join("");

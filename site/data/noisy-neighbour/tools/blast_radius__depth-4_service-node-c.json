@@ -1,0 +1,79 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "blast_radius",
+ "args": {
+  "service": "node-c",
+  "depth": 4
+ },
+ "resolved": {
+  "status": "found",
+  "id": "node-c",
+  "label": "Host",
+  "name": "k8s-node-c",
+  "query": "node-c",
+  "exact": true
+ },
+ "paths": [
+  {
+   "service": "checkout",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "checkout",
+    "cart"
+   ]
+  },
+  {
+   "service": "frontend",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "frontend",
+    "ad"
+   ]
+  },
+  {
+   "service": "agent",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "agent",
+    "frontend",
+    "ad"
+   ]
+  },
+  {
+   "service": "frontend-proxy",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "frontend-proxy",
+    "frontend",
+    "ad"
+   ]
+  },
+  {
+   "service": "mcp",
+   "hops": 2,
+   "sync": true,
+   "via": [
+    "mcp",
+    "frontend",
+    "ad"
+   ]
+  },
+  {
+   "service": "chatbot",
+   "hops": 3,
+   "sync": true,
+   "via": [
+    "chatbot",
+    "agent",
+    "frontend",
+    "ad"
+   ]
+  }
+ ],
+ "answer": "6 services depend on node-c within 4 hops: checkout, frontend, agent, frontend-proxy, mcp, chatbot",
+ "ms": 7.42
+}

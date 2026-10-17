@@ -1,0 +1,848 @@
+{
+ "investigation_id": "inv-8635b52a71",
+ "mode": "graph",
+ "algorithm": "causal-frontier/1.1",
+ "scoring_profile": "evidence",
+ "incident": {
+  "id": "inc-5010",
+  "title": "Elevated errors/latency on Frontend Proxy (Envoy)",
+  "severity": "SEV2",
+  "opened_at": 1842100288,
+  "status": "OPEN",
+  "service": "frontend-proxy"
+ },
+ "abstain_reason": null,
+ "candidates": [
+  {
+   "id": "payment",
+   "label": "Service",
+   "name": "Payment",
+   "score": 7.1229,
+   "confidence": 0.9448,
+   "features": {
+    "frontier": 0.0,
+    "coverage": 0.8333333333333334,
+    "onset": 1.0,
+    "change": 0.9781,
+    "severity": 0.16666666666666666,
+    "common": 0.0,
+    "exposed": 1.0,
+    "lag": 1.0
+   },
+   "evidence": [
+    {
+     "kind": "call_path",
+     "statement": "Frontend Proxy (Envoy) calls Frontend synchronously; degraded -> telemetry missing",
+     "refs": [
+      "frontend-proxy",
+      "frontend"
+     ]
+    },
+    {
+     "kind": "call_path",
+     "statement": "Frontend calls Checkout synchronously; telemetry missing -> degraded",
+     "refs": [
+      "frontend",
+      "checkout"
+     ]
+    },
+    {
+     "kind": "call_path",
+     "statement": "Checkout calls Payment synchronously; degraded -> degraded",
+     "refs": [
+      "checkout",
+      "payment"
+     ]
+    },
+    {
+     "kind": "blind_spot",
+     "refs": [
+      "frontend"
+     ],
+     "statement": "No telemetry for Frontend; traversed through it as unknown"
+    },
+    {
+     "kind": "telemetry",
+     "refs": [
+      "payment"
+     ],
+     "statement": "Payment: error rate 1.9% (baseline 0.9%), p99 242.76 ms (baseline 68.89 ms), anomaly 0.3634"
+    },
+    {
+     "kind": "frontier",
+     "refs": [
+      "payment",
+      "flagd"
+     ],
+     "statement": "Payment has degraded dependencies (flagd); it may be a victim rather than the origin"
+    },
+    {
+     "kind": "onset",
+     "refs": [
+      "payment"
+     ],
+     "statement": "Degraded no later than 100% of the other impacted services (onset t=1842100000)"
+    },
+    {
+     "kind": "change",
+     "refs": [
+      "chg-5010-01",
+      "payment"
+     ],
+     "statement": "Change chg-5010-01 (feature_flag: Enable flag paymentFailure) by alice@astronomy.shop landed 1m19s before the anomaly began"
+    },
+    {
+     "kind": "coverage",
+     "refs": [
+      "payment"
+     ],
+     "statement": "Explains 83% of the other degraded services on the propagation path (they depend on it, directly or transitively)"
+    }
+   ],
+   "path": [
+    "frontend-proxy",
+    "frontend",
+    "checkout",
+    "payment"
+   ],
+   "predicted_recovery": []
+  },
+  {
+   "id": "mcp",
+   "label": "Service",
+   "name": "MCP",
+   "score": 6.1145,
+   "confidence": 0.053,
+   "features": {
+    "frontier": 0.0,
+    "coverage": 0.5,
+    "onset": 0.5,
+    "change": 0.9739,
+    "severity": 0.8333333333333334,
+    "common": 0.0,
+    "exposed": 1.0,
+    "lag": 1.0
+   },
+   "evidence": [
+    {
+     "kind": "call_path",
+     "statement": "Frontend Proxy (Envoy) calls Chatbot synchronously; degraded -> degraded",
+     "refs": [
+      "frontend-proxy",
+      "chatbot"
+     ]
+    },
+    {
+     "kind": "call_path",
+     "statement": "Chatbot calls Agent synchronously; degraded -> degraded",
+     "refs": [
+      "chatbot",
+      "agent"
+     ]
+    },
+    {
+     "kind": "call_path",
+     "statement": "Agent calls MCP synchronously; degraded -> degraded",
+     "refs": [
+      "agent",
+      "mcp"
+     ]
+    },
+    {
+     "kind": "telemetry",
+     "refs": [
+      "mcp"
+     ],
+     "statement": "MCP: error rate 19.1% (baseline 0.6%), p99 176.39 ms (baseline 50.05 ms), anomaly 1.0"
+    },
+    {
+     "kind": "frontier",
+     "refs": [
+      "mcp"
+     ],
+     "statement": "MCP has degraded dependencies (via unknown nodes); it may be a victim rather than the origin"
+    },
+    {
+     "kind": "onset",
+     "refs": [
+      "mcp"
+     ],
+     "statement": "Degraded no later than 50% of the other impacted services (onset t=1842100145)"
+    },
+    {
+     "kind": "change",
+     "refs": [
+      "chg-5010-04",
+      "mcp"
+     ],
+     "statement": "Change chg-5010-04 (feature_flag: Routine feature_flag on mcp) by bob@astronomy.shop landed 1m34s before the anomaly began"
+    },
+    {
+     "kind": "coverage",
+     "refs": [
+      "mcp"
+     ],
+     "statement": "Explains 50% of the other degraded services on the propagation path (they depend on it, directly or transitively)"
+    }
+   ],
+   "path": [
+    "frontend-proxy",
+    "chatbot",
+    "agent",
+    "mcp"
+   ],
+   "predicted_recovery": []
+  },
+  {
+   "id": "checkout",
+   "label": "Service",
+   "name": "Checkout",
+   "score": 5.0,
+   "confidence": 0.0022,
+   "features": {
+    "frontier": 0.0,
+    "coverage": 0.6666666666666666,
+    "onset": 0.8333333333333334,
+    "change": 0.0,
+    "severity": 0.8333333333333334,
+    "common": 0.0,
+    "exposed": 1.0,
+    "lag": 1.0
+   },
+   "evidence": [
+    {
+     "kind": "call_path",
+     "statement": "Frontend Proxy (Envoy) calls Frontend synchronously; degraded -> telemetry missing",
+     "refs": [
+      "frontend-proxy",
+      "frontend"
+     ]
+    },
+    {
+     "kind": "call_path",
+     "statement": "Frontend calls Checkout synchronously; telemetry missing -> degraded",
+     "refs": [
+      "frontend",
+      "checkout"
+     ]
+    },
+    {
+     "kind": "blind_spot",
+     "refs": [
+      "frontend"
+     ],
+     "statement": "No telemetry for Frontend; traversed through it as unknown"
+    },
+    {
+     "kind": "telemetry",
+     "refs": [
+      "checkout"
+     ],
+     "statement": "Checkout: error rate 15.1% (baseline 0.2%), p99 76.95 ms (baseline 68.81 ms), anomaly 1.0"
+    },
+    {
+     "kind": "frontier",
+     "refs": [
+      "checkout",
+      "payment"
+     ],
+     "statement": "Checkout has degraded dependencies (payment); it may be a victim rather than the origin"
+    },
+    {
+     "kind": "onset",
+     "refs": [
+      "checkout"
+     ],
+     "statement": "Degraded no later than 83% of the other impacted services (onset t=1842100029)"
+    },
+    {
+     "kind": "coverage",
+     "refs": [
+      "checkout"
+     ],
+     "statement": "Explains 67% of the other degraded services on the propagation path (they depend on it, directly or transitively)"
+    }
+   ],
+   "path": [
+    "frontend-proxy",
+    "frontend",
+    "checkout"
+   ],
+   "predicted_recovery": []
+  },
+  {
+   "id": "agent",
+   "label": "Service",
+   "name": "Agent",
+   "score": 3.25,
+   "confidence": 0.0,
+   "features": {
+    "frontier": 0.0,
+    "coverage": 0.3333333333333333,
+    "onset": 0.3333333333333333,
+    "change": 0.0,
+    "severity": 0.0,
+    "common": 0.0,
+    "exposed": 1.0,
+    "lag": 1.0
+   },
+   "evidence": [],
+   "path": [],
+   "predicted_recovery": []
+  },
+  {
+   "id": "frontend-proxy",
+   "label": "Service",
+   "name": "Frontend Proxy (Envoy)",
+   "score": 3.0,
+   "confidence": 0.0,
+   "features": {
+    "frontier": 0.0,
+    "coverage": 0.0,
+    "onset": 0.6666666666666666,
+    "change": 0.0,
+    "severity": 0.8333333333333334,
+    "common": 0.0,
+    "exposed": 1.0,
+    "lag": 0.5
+   },
+   "evidence": [],
+   "path": [],
+   "predicted_recovery": []
+  }
+ ],
+ "root_cause": {
+  "id": "payment",
+  "label": "Service",
+  "name": "Payment",
+  "score": 7.1229,
+  "confidence": 0.9448,
+  "features": {
+   "frontier": 0.0,
+   "coverage": 0.8333333333333334,
+   "onset": 1.0,
+   "change": 0.9781,
+   "severity": 0.16666666666666666,
+   "common": 0.0,
+   "exposed": 1.0,
+   "lag": 1.0
+  },
+  "evidence": [
+   {
+    "kind": "call_path",
+    "statement": "Frontend Proxy (Envoy) calls Frontend synchronously; degraded -> telemetry missing",
+    "refs": [
+     "frontend-proxy",
+     "frontend"
+    ]
+   },
+   {
+    "kind": "call_path",
+    "statement": "Frontend calls Checkout synchronously; telemetry missing -> degraded",
+    "refs": [
+     "frontend",
+     "checkout"
+    ]
+   },
+   {
+    "kind": "call_path",
+    "statement": "Checkout calls Payment synchronously; degraded -> degraded",
+    "refs": [
+     "checkout",
+     "payment"
+    ]
+   },
+   {
+    "kind": "blind_spot",
+    "refs": [
+     "frontend"
+    ],
+    "statement": "No telemetry for Frontend; traversed through it as unknown"
+   },
+   {
+    "kind": "telemetry",
+    "refs": [
+     "payment"
+    ],
+    "statement": "Payment: error rate 1.9% (baseline 0.9%), p99 242.76 ms (baseline 68.89 ms), anomaly 0.3634"
+   },
+   {
+    "kind": "frontier",
+    "refs": [
+     "payment",
+     "flagd"
+    ],
+    "statement": "Payment has degraded dependencies (flagd); it may be a victim rather than the origin"
+   },
+   {
+    "kind": "onset",
+    "refs": [
+     "payment"
+    ],
+    "statement": "Degraded no later than 100% of the other impacted services (onset t=1842100000)"
+   },
+   {
+    "kind": "change",
+    "refs": [
+     "chg-5010-01",
+     "payment"
+    ],
+    "statement": "Change chg-5010-01 (feature_flag: Enable flag paymentFailure) by alice@astronomy.shop landed 1m19s before the anomaly began"
+   },
+   {
+    "kind": "coverage",
+    "refs": [
+     "payment"
+    ],
+    "statement": "Explains 83% of the other degraded services on the propagation path (they depend on it, directly or transitively)"
+   }
+  ],
+  "path": [
+   "frontend-proxy",
+   "frontend",
+   "checkout",
+   "payment"
+  ],
+  "predicted_recovery": []
+ },
+ "subgraph": {
+  "nodes": [
+   {
+    "id": "frontend-proxy",
+    "name": "Frontend Proxy (Envoy)",
+    "kind": "proxy",
+    "anomaly": 1.0,
+    "onset": 1842100114,
+    "degraded": true,
+    "host": "node-a",
+    "error_rate": 0.1411,
+    "p99_ms": 170.41
+   },
+   {
+    "id": "frontend",
+    "name": "Frontend",
+    "kind": "service",
+    "anomaly": null,
+    "onset": null,
+    "degraded": false,
+    "host": "node-a",
+    "error_rate": null,
+    "p99_ms": null
+   },
+   {
+    "id": "checkout",
+    "name": "Checkout",
+    "kind": "service",
+    "anomaly": 1.0,
+    "onset": 1842100029,
+    "degraded": true,
+    "host": "node-b",
+    "error_rate": 0.1514,
+    "p99_ms": 76.95
+   },
+   {
+    "id": "payment",
+    "name": "Payment",
+    "kind": "service",
+    "anomaly": 0.3634,
+    "onset": 1842100000,
+    "degraded": true,
+    "host": "node-b",
+    "error_rate": 0.0192,
+    "p99_ms": 242.76
+   },
+   {
+    "id": "flagd",
+    "name": "Flagd",
+    "kind": "flags",
+    "anomaly": 0.736,
+    "onset": 1842100534,
+    "degraded": true,
+    "host": "node-f",
+    "error_rate": 0.0755,
+    "p99_ms": 17.58
+   },
+   {
+    "id": "chatbot",
+    "name": "Chatbot",
+    "kind": "service",
+    "anomaly": 0.794,
+    "onset": 1842100238,
+    "degraded": true,
+    "host": "node-g",
+    "error_rate": 0.0863,
+    "p99_ms": 44.77
+   },
+   {
+    "id": "agent",
+    "name": "Agent",
+    "kind": "service",
+    "anomaly": 0.342,
+    "onset": 1842100154,
+    "degraded": true,
+    "host": "node-g",
+    "error_rate": 0.0054,
+    "p99_ms": 173.11
+   },
+   {
+    "id": "mcp",
+    "name": "MCP",
+    "kind": "service",
+    "anomaly": 1.0,
+    "onset": 1842100145,
+    "degraded": true,
+    "host": "node-g",
+    "error_rate": 0.1913,
+    "p99_ms": 176.39
+   }
+  ],
+  "edges": [
+   {
+    "src": "frontend-proxy",
+    "dst": "frontend",
+    "has_fallback": false
+   },
+   {
+    "src": "frontend-proxy",
+    "dst": "flagd",
+    "has_fallback": true
+   },
+   {
+    "src": "frontend-proxy",
+    "dst": "chatbot",
+    "has_fallback": false
+   },
+   {
+    "src": "frontend",
+    "dst": "checkout",
+    "has_fallback": false
+   },
+   {
+    "src": "chatbot",
+    "dst": "agent",
+    "has_fallback": false
+   },
+   {
+    "src": "checkout",
+    "dst": "payment",
+    "has_fallback": false
+   },
+   {
+    "src": "agent",
+    "dst": "frontend",
+    "has_fallback": false
+   },
+   {
+    "src": "agent",
+    "dst": "mcp",
+    "has_fallback": false
+   },
+   {
+    "src": "payment",
+    "dst": "flagd",
+    "has_fallback": true
+   },
+   {
+    "src": "mcp",
+    "dst": "frontend",
+    "has_fallback": false
+   }
+  ],
+  "blind_spots": [
+   "frontend"
+  ]
+ },
+ "blast_radius": {
+  "roots": [
+   "payment"
+  ],
+  "impacted": [
+   {
+    "id": "checkout",
+    "hops": 1,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "high",
+    "degraded": true
+   },
+   {
+    "id": "frontend",
+    "hops": 2,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "high",
+    "degraded": false
+   },
+   {
+    "id": "agent",
+    "hops": 3,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "normal",
+    "degraded": true
+   },
+   {
+    "id": "frontend-proxy",
+    "hops": 3,
+    "sync": true,
+    "entrypoint": true,
+    "criticality": "high",
+    "degraded": true
+   },
+   {
+    "id": "mcp",
+    "hops": 3,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "normal",
+    "degraded": true
+   },
+   {
+    "id": "chatbot",
+    "hops": 4,
+    "sync": true,
+    "entrypoint": false,
+    "criticality": "normal",
+    "degraded": true
+   }
+  ],
+  "entrypoints": [
+   "frontend-proxy"
+  ],
+  "sync_count": 6,
+  "async_only_count": 0,
+  "high_criticality": [
+   "checkout",
+   "frontend",
+   "frontend-proxy"
+  ],
+  "max_hops": 4,
+  "elapsed_ms": 4.858100001001731
+ },
+ "breakers": {
+  "status": "ok",
+  "max_flow": 120.0,
+  "cut": [
+   {
+    "src": "checkout",
+    "dst": "payment",
+    "cost": 120,
+    "rps": 120,
+    "breaker": true,
+    "has_fallback": false,
+    "target_degraded": true
+   }
+  ],
+  "cut_cost": 120,
+  "shed_rps": 120,
+  "naive": {
+   "edges": [
+    {
+     "src": "checkout",
+     "dst": "payment",
+     "rps": 120,
+     "breaker": true,
+     "cost": 120
+    }
+   ],
+   "feasible": true,
+   "cost": 120
+  },
+  "elapsed_ms": 4.319300001952797
+ },
+ "who_to_page": {
+  "outcome": "answered_with_path",
+  "answer": "Page Alice Moreau (on-call owner, change author, knows this service); Elif Demir (knows this service)",
+  "people": [
+   {
+    "person": "p-alice",
+    "name": "Alice Moreau",
+    "role": "on-call owner",
+    "priority": 1,
+    "path": [
+     "p-alice",
+     "ON_CALL",
+     "team-checkout",
+     "OWNS",
+     "payment"
+    ],
+    "reason": "on call for Checkout & Payments, which owns payment"
+   },
+   {
+    "person": "p-alice",
+    "name": "Alice Moreau",
+    "role": "change author",
+    "priority": 2,
+    "path": [
+     "p-alice",
+     "AUTHORED",
+     "chg-5010-01",
+     "CHANGED",
+     "payment"
+    ],
+    "reason": "authored chg-5010-01 (Enable flag paymentFailure) 6 min before"
+   },
+   {
+    "person": "p-alice",
+    "name": "Alice Moreau",
+    "role": "knows this service",
+    "priority": 3,
+    "path": [
+     "p-alice",
+     "WORKED_ON",
+     "payment"
+    ],
+    "reason": "120 commits on payment"
+   },
+   {
+    "person": "p-elif",
+    "name": "Elif Demir",
+    "role": "knows this service",
+    "priority": 3,
+    "path": [
+     "p-elif",
+     "WORKED_ON",
+     "payment"
+    ],
+    "reason": "109 commits on payment"
+   }
+  ]
+ },
+ "actions": [
+  {
+   "id": "inv-8635b52a71-a1",
+   "kind": "rollback_change",
+   "summary": "Roll back chg-5010-01 on payment",
+   "target_id": "chg-5010-01",
+   "target_label": "Change",
+   "risk": "low",
+   "rationale": "Change chg-5010-01 (feature_flag: Enable flag paymentFailure) by alice@astronomy.shop landed 1m19s before the anomaly began",
+   "refs": [
+    "chg-5010-01",
+    "payment"
+   ],
+   "requires_approval": true,
+   "status": "PROPOSED",
+   "expected_recovery": [],
+   "fix_target": "payment",
+   "fix_label": "Service"
+  },
+  {
+   "id": "inv-8635b52a71-a2",
+   "kind": "circuit_breakers",
+   "summary": "Open circuit breakers on checkout->payment",
+   "target_id": "payment",
+   "target_label": "Service",
+   "risk": "low",
+   "rationale": "Minimum cut from entrypoints to the root (FalkorDB algo.maxFlow): cost 120, sheds 120 rps; same as breaking every direct caller",
+   "refs": [
+    "checkout",
+    "payment"
+   ],
+   "requires_approval": true,
+   "status": "PROPOSED",
+   "edges": [
+    [
+     "checkout",
+     "payment"
+    ]
+   ]
+  },
+  {
+   "id": "inv-8635b52a71-a3",
+   "kind": "page",
+   "summary": "Page Alice Moreau (on-call owner for payment)",
+   "target_id": "p-alice",
+   "target_label": "Person",
+   "risk": "none",
+   "rationale": "Alice Moreau: on call for Checkout & Payments, which owns payment; Alice Moreau: authored chg-5010-01 (Enable flag paymentFailure) 6 min before; Alice Moreau: 120 commits on payment",
+   "refs": [
+    "p-alice",
+    "payment"
+   ],
+   "requires_approval": false,
+   "status": "ADVISORY"
+  },
+  {
+   "id": "inv-8635b52a71-a4",
+   "kind": "advisory",
+   "summary": "Do not restart frontend-proxy",
+   "target_id": "frontend-proxy",
+   "target_label": "Service",
+   "risk": "none",
+   "rationale": "frontend-proxy is degraded because of what it calls: path frontend-proxy -> frontend -> checkout -> payment",
+   "refs": [
+    "frontend-proxy",
+    "frontend",
+    "checkout",
+    "payment"
+   ],
+   "requires_approval": false,
+   "status": "ADVISORY"
+  }
+ ],
+ "similar_incidents": [],
+ "narrative": {
+  "text": "Incident inc-5010 (Elevated errors/latency on Frontend Proxy (Envoy)) most likely originates at service payment (relative confidence 94%). The failure propagates along frontend-proxy -> frontend -> checkout -> payment. No telemetry for Frontend; traversed through it as unknown. Payment has degraded dependencies (flagd); it may be a victim rather than the origin. Change chg-5010-01 (feature_flag: Enable flag paymentFailure) by alice@astronomy.shop landed 1m19s before the anomaly began. Blast radius: 6 upstream services (6 synchronously exposed), entrypoints: frontend-proxy.",
+  "source": "template",
+  "violations": [],
+  "llm_ms": null
+ },
+ "trace": [
+  {
+   "tool": "get_incident",
+   "purpose": "Load the incident and the service it was reported on",
+   "result": "reported on frontend-proxy",
+   "ms": 2.09
+  },
+  {
+   "tool": "extract_anomalous_subgraph",
+   "purpose": "Follow synchronous CALLS downstream through degraded/unknown services",
+   "result": "8 services, 10 calls, 7 degraded, 1 blind spots, 7 Cypher queries",
+   "ms": 11.52
+  },
+  {
+   "tool": "score_candidates",
+   "purpose": "Score frontier/coverage/onset/change/host/lag evidence",
+   "result": "payment 94%, mcp 5%, checkout 0% (profile: evidence)",
+   "ms": 0.55
+  },
+  {
+   "tool": "recall_similar_incidents",
+   "purpose": "Look for past incidents with overlapping impact",
+   "result": "0 similar past incidents",
+   "ms": 5.31
+  },
+  {
+   "tool": "blast_radius",
+   "purpose": "Upstream BFS from the root over CALLS",
+   "result": "6 impacted, entrypoints ['frontend-proxy']",
+   "ms": 4.89
+  },
+  {
+   "tool": "breaker_min_cut",
+   "purpose": "algo.maxFlow over cut_cost, then residual min-cut",
+   "result": "1 breakers, cost 120",
+   "ms": 4.34
+  },
+  {
+   "tool": "who_to_page",
+   "purpose": "On-call owner, change authors and people with history (ON_CALL, AUTHORED, WORKED_ON)",
+   "result": "Page Alice Moreau (on-call owner, change author, knows this service); Elif Demir (knows this service)",
+   "ms": 5.0
+  },
+  {
+   "tool": "propose_actions",
+   "purpose": "Derive actions from the evidence; mutating ones need approval",
+   "result": "2 need approval, 2 advisories",
+   "ms": 2.16
+  },
+  {
+   "tool": "narrate",
+   "purpose": "Summarise from evidence (LLM optional, grounding-checked)",
+   "result": "template",
+   "ms": 0.11
+  }
+ ],
+ "elapsed_ms": 36.49
+}

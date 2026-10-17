@@ -1,0 +1,38 @@
+{
+ "outcome": "answered_with_path",
+ "tool": "blast_radius",
+ "args": {
+  "service": "postgresql",
+  "depth": 1
+ },
+ "resolved": {
+  "status": "found",
+  "id": "postgresql",
+  "label": "Service",
+  "name": "astronomy-db (PostgreSQL)",
+  "query": "postgresql",
+  "exact": true
+ },
+ "paths": [
+  {
+   "service": "accounting",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "accounting",
+    "postgresql"
+   ]
+  },
+  {
+   "service": "product-catalog",
+   "hops": 1,
+   "sync": true,
+   "via": [
+    "product-catalog",
+    "postgresql"
+   ]
+  }
+ ],
+ "answer": "2 services depend on postgresql within 1 hops: accounting, product-catalog",
+ "ms": 2.04
+}
