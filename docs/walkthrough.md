@@ -1,8 +1,7 @@
-# Walkthrough for the author
+# Code walkthrough
 
-Rules 12–13 say you must be able to explain the graph model, the queries, the
-architecture and the decisions. This page is a 30-minute guided tour. Do each
-"try it" step yourself.
+A 30-minute guided tour of the graph model, the queries, the architecture and the
+design decisions. Do each "try it" step yourself.
 
 ## 1. The idea in one paragraph
 
@@ -49,7 +48,7 @@ uvicorn synapseguard.api.app:app --port 8000      # open http://localhost:8000
   (Answer: Quote's callers use plain HTTP clients without breakers, so the cheapest cut is at the proxy.)
 * Open FalkorDB Browser at <http://localhost:3001> and run the queries in `docs/graph-model.md`.
 
-## 4. Questions a judge may ask, with short answers
+## 4. Common questions, with short answers
 
 * **Why is the graph necessary?** Rows alone can't tell which degraded services can
   reach the symptom, can't produce the causal path, the blast radius or a
@@ -75,9 +74,3 @@ uvicorn synapseguard.api.app:app --port 8000      # open http://localhost:8000
 * **What is `cut_cost`?** The healthy traffic lost by opening a breaker on that call;
   uncuttable if the caller has no breaker. Max-flow = min-cut gives the cheapest isolation.
 * **How did you pick weights?** Coordinate ascent on validation seeds; reported on separate test seeds.
-
-## 5. Things only you should decide
-
-* Confirm Track 01 only (see docs/competition.md, "Track decision").
-* Whether to delete the legacy v1 files (listed in `docs/submission-checklist.md`).
-* The project name and how you present the real-world results in the video.

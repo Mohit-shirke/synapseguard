@@ -61,3 +61,6 @@ chrome-tmp/
 
 # Demo video and other upload-only deliverables (not committed)
 submission/
+
+# Personal preparation notes (kept locally, not published)
+notes/

@@ -190,7 +190,7 @@ follows the same principles (fixed tools, name resolution, paths with every answ
 memory as nodes) and adds what an incident actually needs next: **which service is the
 root cause**, with an evidence model measured on 1,250 synthetic and 645 real
 fault-injection cases; **min-cut circuit-breaker placement**; and a **human-approved
-action lifecycle**. Mapping: [docs/competition.md](docs/competition.md).
+action lifecycle**. Mapping: [docs/design-alignment.md](docs/design-alignment.md).
 
 ## Why FalkorDB here
 
@@ -228,14 +228,10 @@ The old v1 modules (`synapseguard/engine/{agent,memory,traversal}.py`,
 `synapseguard/data/{seed,scale_seed}.py`, `synapseguard/frontend/`,
 `synapseguard/tests/`) are superseded and not used by v2.
 
-## AI assistance (Rule 11)
+## Reproducibility
 
-This project was built with heavy use of an AI coding assistant (Claude Code)
-for research, implementation, testing and documentation. The assistant fetched
-the rules, wrote most of the code, ran the benchmarks and found the FalkorDB
-issues; every number in this README comes from scripts in `bench/` that can be
-re-run. The author, Mohit Shirke, is responsible for the code and must be able to explain it;
-see [docs/walkthrough.md](docs/walkthrough.md).
+Every number in this README comes from scripts in `bench/` that can be re-run; raw
+outputs are in `bench/results/`. A guided tour of the code: [docs/walkthrough.md](docs/walkthrough.md).
 
 ## License
 
