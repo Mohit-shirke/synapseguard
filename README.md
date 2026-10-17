@@ -38,6 +38,8 @@ Team **Night Hunter**: Mohit Sachin Shirke (solo entry).
 ([download the mp4](https://github.com/Mohit-shirke/synapseguard/releases/download/v1.0.0/synapseguard-demo.mp4)). Script, timestamps and the source of every number:
 [docs/demo-script.md](docs/demo-script.md).
 
+**Blog post:** [What a graph actually buys an incident agent (and what it doesn't)](https://dev.to/mohit_shirke/what-a-graph-actually-buys-an-incident-agent-and-what-it-doesnt-k58)
+
 **Try it in the browser:** <https://mohit-shirke.github.io/synapseguard/>: a recorded demo of the real
 UI replaying responses captured from the running app (all five scenarios, investigations, Ask
 chips). Approve/execute and the local LLM need the live app: `docker compose up -d --build`.
