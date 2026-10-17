@@ -19,6 +19,6 @@ jobs:
         env:
           PYTHONPATH: .
       - name: synthetic accuracy smoke (small)
-        run: python -m bench.eval_accuracy --val 0:40 --test 1000:1080
+        run: python -m bench.eval_accuracy --val 0:40 --test 1000:1080 --out ${{ runner.temp }}/smoke
         env:
           PYTHONPATH: .

@@ -201,6 +201,7 @@ def main(argv=None):
     ap.add_argument("--test", default="1000:1500")
     ap.add_argument("--weights", choices=["tune", "default"], default="tune")
     ap.add_argument("--graph", default="sg_eval")
+    ap.add_argument("--out", default=str(OUT), help="results folder (CI smoke runs use a temp folder)")
     args = ap.parse_args(argv)
 
     store = GraphStore(args.graph)
@@ -252,10 +253,11 @@ def main(argv=None):
                         "processor": platform.processor()},
         "wall_time_s": round(time.time() - t0, 1),
     }
-    OUT.mkdir(parents=True, exist_ok=True)
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
     tag = args.topology.replace(":", "")
-    (OUT / f"accuracy_{tag}.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
-    (OUT / f"accuracy_{tag}.md").write_text(to_markdown(report), encoding="utf-8")
+    (out / f"accuracy_{tag}.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    (out / f"accuracy_{tag}.md").write_text(to_markdown(report), encoding="utf-8")
     print(to_markdown(report))
 
 
