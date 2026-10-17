@@ -27,6 +27,10 @@ Team **Night Hunter**: Mohit Shirke (solo entry).
   it is confidently wrong (≥80% and wrong) on **3.2%** of held-out incidents, and every answer below
   90% is flagged for a second look.
 
+## Demo video
+
+**Video:** _link added at submission_ (2–3 min walkthrough of the live app).
+
 ## The problem
 
 When a request path breaks, the alert fires on the front door (proxy 5xx,
@@ -227,6 +231,12 @@ The old v1 modules (`synapseguard/engine/{agent,memory,traversal}.py`,
 `synapseguard/api/server.py`, `synapseguard/core/{db,schema}.py`,
 `synapseguard/data/{seed,scale_seed}.py`, `synapseguard/frontend/`,
 `synapseguard/tests/`) are superseded and not used by v2.
+
+## AI assistance disclosure (Rule 11)
+
+AI coding assistants were used during development. Mohit Shirke is responsible for the
+code, the graph model and the design decisions; [docs/walkthrough.md](docs/walkthrough.md)
+explains them.
 
 ## Reproducibility
 
